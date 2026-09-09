@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#05090e">
+  <meta name="description" content="Inference strategies: tree and graph search, parallel sampling, and how test-time compute is allocated.">
+  <title>Inference Strategies · Dataforge</title>
+  <link rel="stylesheet" href="inference-strategy.css">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="site-header">
+    <a class="back-home" href="../index.html#inference">← Back to Test-Time Architectures</a>
+    <span class="header-label">DATAFORGE · INFERENCE STRATEGY</span>
+    <span class="header-question">HOW IS COMPUTE SPENT?</span>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow">INFERENCE STRATEGY</p>
+      <h1>HOW IS COMPUTE <span>SPENT?</span></h1>
+      <p class="intro-copy">The model can stay fixed while the system changes how much inference-time computation is used, where that computation is allocated, and when a candidate is allowed to continue.</p>
+    </section>
+
+    <section class="story-row row-52-48" aria-labelledby="row1-title">
+      <div class="story-copy">
+        <p class="row-index">01 · COMPUTE ALLOCATION</p>
+        <h2 id="row1-title">Same model. Different spending plan.</h2>
+        <p>At test time, producing the first possible answer does not have to end the computation.</p>
+        <p>A system can spend additional compute <strong>before committing to an output</strong>. The important question is not only <em>how much</em> compute is available, but <strong>where that compute goes</strong>.</p>
+        <p>One strategy spends compute <strong>inside the solution process</strong>: generate partial states, evaluate them, expand promising directions, and abandon weak ones.</p>
+        <p>Another spends compute <strong>across complete attempts</strong>: generate several independent candidate solutions, then compare or aggregate them.</p>
+        <div class="principle-pair">
+          <p><strong>Tree / Graph Search</strong><span>decide where to explore next.</span></p>
+          <p><strong>Parallel Sampling</strong><span>decide what other complete solution to try.</span></p>
+        </div>
+        <p>Neither requires retraining the underlying model. What changes is the <strong>organization of inference-time computation</strong>.</p>
+      </div>
+      <figure class="visual-frame">
+        <img src="assets/inference-budget.png" alt="A problem receives a compute budget that can be allocated either to search over partial states or sampling complete answers before a final output.">
+        <figcaption>Reference idea: Best-of-N versus beam/search-style allocation of test-time compute.</figcaption>
+      </figure>
+    </section>
+
+    <section class="strategy-gateway" aria-label="Inference strategy destinations">
+      <div class="gateway-heading">
+        <p class="eyebrow">CHOOSE A COMPUTE POLICY</p>
+        <h2>Two ways to spend extra inference compute.</h2>
+      </div>
+      <div class="gateway-cards">
+        <a class="gateway-card" href="../tree-graph/index.html">
+          <span class="gateway-number">01</span>
+          <strong>TREE / GRAPH SEARCH</strong>
+          <p>Explore intermediate possibilities, keep promising states, and redirect compute when a path weakens.</p>
+          <span class="gateway-arrow">Explore →</span>
+        </a>
+        <a class="gateway-card" href="../parallel-sampling/index.html">
+          <span class="gateway-number">02</span>
+          <strong>PARALLEL SAMPLING</strong>
+          <p>Generate multiple complete candidate trajectories, then compare, rank, vote, or aggregate them.</p>
+          <span class="gateway-arrow">Explore →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section-break" aria-labelledby="tree-section">
+      <p class="eyebrow">TREE / GRAPH SEARCH</p>
+      <h2 id="tree-section">Spend compute inside the solution process.</h2>
+    </section>
+
+    <section class="story-row row-44-56 visual-first" aria-labelledby="row2-title">
+      <figure class="visual-frame">
+        <img src="assets/tree-partial-states.png" alt="A tree search where states have scores and the strongest branch continues through B2 and B2b to the answer.">
+        <figcaption>Faded or lower-scoring branches can be rejected; promising states continue receiving compute.</figcaption>
+      </figure>
+      <div class="story-copy">
+        <p class="row-index">02 · PARTIAL STATES</p>
+        <h2 id="row2-title">Don't wait until the end to decide.</h2>
+        <p>Tree search treats reasoning as a sequence of <strong>intermediate states</strong> rather than one indivisible answer.</p>
+        <p>From the current state, the system generates several possible next steps. An evaluator estimates which states appear promising. Search then allocates additional computation to selected branches while weak branches can be <strong>pruned before they become complete answers</strong>.</p>
+        <p class="flow-equation">Generate <b>→</b> Evaluate <b>→</b> Select <b>→</b> Expand</p>
+        <p>If a chosen route stops working, the system can return to an earlier decision and explore another branch.</p>
+        <p>Tree of Thoughts formalizes this idea by representing coherent intermediate “thoughts” as states and combining generation, evaluation, and classical search procedures such as breadth-first or depth-first search.</p>
+        <blockquote>Search spends more compute where the solution currently looks promising.</blockquote>
+      </div>
+    </section>
+
+    <section class="story-row row-58-42" aria-labelledby="row3-title">
+      <div class="story-copy">
+        <p class="row-index">03 · SEARCH-SPACE GROWTH</p>
+        <h2 id="row3-title">More depth creates more possibilities—and more waste.</h2>
+        <p>Suppose every state can produce <strong>b</strong> possible next states. After <strong>d</strong> levels, the potential search space grows approximately as:</p>
+        <div class="math-line" aria-label="one plus b plus b squared continuing through b to the d">1 + b + b² + … + bᵈ</div>
+        <p>For a branching factor of only <strong>3</strong>, going from depth 2 to depth 6 changes the full search space from <strong>13 states to 1,093 states</strong>.</p>
+        <p>So the purpose of search is not simply to generate more reasoning. It is to <strong>avoid spending equal compute everywhere</strong>.</p>
+        <p>A useful evaluator lets the system concentrate computation on a small subset of the possible state space.</p>
+        <div class="question-pair">
+          <p>Can it <strong>generate useful possibilities?</strong></p>
+          <p>Can it <strong>recognize which possibilities deserve more compute?</strong></p>
+        </div>
+      </div>
+      <div class="visual-stack">
+        <figure class="visual-frame paper-visual">
+          <img src="assets/tree-growth-line.png" alt="Line chart showing full tree size for branching factor three increasing rapidly with depth from 1 to 6.">
+          <figcaption>Illustrative complete tree, b = 3 — not benchmark data.</figcaption>
+        </figure>
+        <figure class="visual-frame compact paper-visual">
+          <img src="assets/tree-growth-bars.png" alt="Bar chart showing the same full tree size values for depths one through six.">
+          <figcaption>Same values shown as discrete depth levels.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="story-row row-42-58 visual-first" aria-labelledby="row4-title">
+      <figure class="visual-frame">
+        <img src="assets/graph-vs-tree.png" alt="Comparison of a graph with merging and refinement paths versus a tree where branches remain separate.">
+        <figcaption>Graphs can merge, reconnect, and refine states that originated on different paths.</figcaption>
+      </figure>
+      <div class="story-copy">
+        <p class="row-index">04 · GRAPH REASONING</p>
+        <h2 id="row4-title">Reasoning does not always form a tree.</h2>
+        <p>In a tree, every state belongs to one path. But two different reasoning paths may discover information that should be <strong>combined</strong>.</p>
+        <p>A graph representation allows states to have multiple dependencies. Separate candidates can merge into a new state, an earlier result can be refined, and information discovered in one branch can influence another.</p>
+        <p>Graph of Thoughts generalizes tree-structured reasoning by allowing arbitrary dependencies between reasoning units, including <strong>aggregation and feedback loops</strong>.</p>
+        <blockquote class="dual-quote"><span>Tree Search explores alternatives.</span><span>Graph Search can also reconnect what those alternatives discover.</span></blockquote>
+        <p>This distinction gives “graph” a concrete role rather than treating Tree / Graph Search as one interchangeable phrase.</p>
+      </div>
+    </section>
+
+    <section class="story-row row-57-43" aria-labelledby="row5-title">
+      <div class="story-copy">
+        <p class="row-index">05 · TARGETED COMPUTE</p>
+        <h2 id="row5-title">The same compute is not equally useful everywhere.</h2>
+        <p>Consider a problem where one wrong early decision makes everything downstream invalid.</p>
+        <p>Generating 100 complete answers means paying for 100 trajectories—even when many became hopeless near the beginning. Search can instead score a partial trajectory, terminate it early, and move the remaining computation elsewhere.</p>
+        <p>The Game of 24 experiments in <em>Tree of Thoughts</em> are a concrete example. In that experiment, the reported success rate was <strong>74% for ToT with breadth 5</strong>, compared with <strong>9% for 100-sample CoT self-consistency</strong> and <strong>49% when choosing the best of 100 CoT samples</strong>.</p>
+        <p class="source-note">These numbers are task- and setup-specific. Source: Yao et al., <em>Tree of Thoughts</em>, Table 2.</p>
+      </div>
+      <figure class="visual-frame paper-visual">
+        <img src="assets/game-of-24-results.png" alt="Game of 24 success rate comparison: CoT self-consistency 100 samples, best of 100 CoT, and Tree of Thoughts breadth five.">
+        <figcaption>Task-specific paper results used to illustrate why allocation can matter as much as total compute.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section-break parallel-break" aria-labelledby="parallel-section">
+      <p class="eyebrow">PARALLEL SAMPLING</p>
+      <h2 id="parallel-section">Spend compute across complete attempts.</h2>
+    </section>
+
+    <section class="story-row row-43-57 visual-first" aria-labelledby="row6-title">
+      <figure class="visual-frame">
+        <img src="assets/parallel-aggregation.png" alt="Three complete sampled solution paths produce answers which are aggregated by majority occurrence into a final answer.">
+        <figcaption>Each trajectory is completed first; aggregation happens afterward.</figcaption>
+      </figure>
+      <div class="story-copy">
+        <p class="row-index">06 · ANSWER-LEVEL BREADTH</p>
+        <h2 id="row6-title">Generate first. Compare later.</h2>
+        <p>Parallel sampling spends additional compute by producing <strong>multiple complete candidate trajectories</strong> from the same starting problem.</p>
+        <p>Each sample explores the model's solution distribution independently or semi-independently. Only after candidates have been generated does a selection mechanism combine them.</p>
+        <div class="mechanism-list" aria-label="Possible aggregation mechanisms">
+          <span>majority voting</span><span>verifier / reward model</span><span>consensus</span><span>candidate ranking</span>
+        </div>
+        <p>Self-consistency follows this principle: sample diverse reasoning paths and marginalize over their final answers rather than trusting one greedy trajectory.</p>
+        <blockquote>Search chooses between intermediate states. Sampling chooses between completed attempts.</blockquote>
+      </div>
+    </section>
+
+    <section class="story-row row-58-42" aria-labelledby="row7-title">
+      <div class="story-copy">
+        <p class="row-index">07 · DIVERSITY</p>
+        <h2 id="row7-title">Ten attempts are useful only if they explore something new.</h2>
+        <p>If every sample reproduces essentially the same trajectory, parallel generation may consume ten times the compute while gaining very little additional information.</p>
+        <p>The benefit appears when stochastic generation reveals <strong>alternative reasoning paths</strong>. Self-consistency experiments show improving performance as the number of sampled reasoning paths increased from 1 through 5, 10, 20 and 40 in their evaluated tasks.</p>
+        <p>But there is an important limitation: samples from the same model are <strong>not truly independent</strong>. They can share the same biases, miss the same evidence, or converge on the same attractive-but-wrong answer.</p>
+        <div class="target-shift"><span>not simply</span><strong>more samples</strong><b>→</b><span>target</span><strong>more useful diversity per unit of compute</strong></div>
+        <p class="source-note">Empirical reference: Wang et al., <em>Self-Consistency</em>, Figure 2.</p>
+      </div>
+      <figure class="visual-frame">
+        <img src="assets/sampling-diversity.png" alt="High diversity samples spread across different regions while low diversity samples cluster in the same region.">
+        <figcaption>Diversity is valuable when samples cover meaningfully different regions of the solution space.</figcaption>
+      </figure>
+    </section>
+
+    <section class="story-row row-46-54 visual-first" aria-labelledby="row8-title">
+      <figure class="visual-frame">
+        <img src="assets/search-vs-parallel.png" alt="Comparison where search concentrates compute on surviving partial paths while parallel sampling spends compute on five complete paths.">
+        <figcaption>Search concentrates the budget after intermediate evaluation; parallel sampling pays for complete trajectories.</figcaption>
+      </figure>
+      <div class="story-copy">
+        <p class="row-index">08 · WHERE BREADTH LIVES</p>
+        <h2 id="row8-title">Breadth can happen at different levels.</h2>
+        <p>Parallel sampling spends breadth <strong>across complete responses</strong>. Search spends breadth <strong>inside the reasoning process</strong>.</p>
+        <p>This difference becomes important when a problem contains informative intermediate states. If intermediate quality can be judged reliably, search can stop wasting compute on bad trajectories.</p>
+        <p>If intermediate states are difficult to evaluate but complete outputs are easy to compare, parallel sampling may be the simpler and more robust strategy.</p>
+        <p>This is why there is no universally optimal choice. The best allocation depends on the <strong>problem difficulty, compute budget, and quality of the verifier</strong>.</p>
+        <p class="source-note">Snell et al. report that the optimal test-time strategy varies with problem difficulty and inference budget rather than one strategy dominating everywhere.</p>
+      </div>
+    </section>
+
+    <section class="story-row row-60-40" aria-labelledby="row9-title">
+      <div class="story-copy">
+        <p class="row-index">09 · DIMINISHING RETURNS</p>
+        <h2 id="row9-title">Compute has diminishing—and sometimes negative—returns.</h2>
+        <p>Adding inference compute only helps if the system knows how to use it.</p>
+        <p>Search can waste computation exploring low-value branches. Sampling can repeatedly reproduce correlated errors. A verifier can rank a wrong trajectory above a correct one. And excessive optimization against an imperfect evaluator can make outputs worse rather than better.</p>
+        <p>In Snell et al.'s experiments, the effectiveness of different search strategies varied with both the compute budget and estimated question difficulty; their results show regimes where allocating additional search was not the best choice.</p>
+        <div class="goal-reframe">
+          <p><span>NOT THE GOAL</span><strong>Spend as much compute as possible.</strong></p>
+          <p><span>THE GOAL</span><strong>Spend the next unit of compute where it has the highest expected value.</strong></p>
+        </div>
+      </div>
+      <figure class="visual-frame">
+        <img src="assets/compute-policy-summary.png" alt="Summary comparing tree or graph search as adaptive state-space allocation with parallel sampling as independent breadth across candidates.">
+        <figcaption>Different compute policies answer different allocation questions.</figcaption>
+      </figure>
+    </section>
+
+    <section class="closing-line" aria-label="Core inference strategy takeaway">
+      <p>SAME MODEL. SAME PROBLEM. DIFFERENT COMPUTE POLICY.</p>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <a href="../index.html#inference">← Return to the inference layer</a>
+    <span>Dataforge · Test-Time Architectures</span>
+  </footer>
+</body>
+</html>

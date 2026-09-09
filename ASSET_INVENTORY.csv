@@ -1,0 +1,37 @@
+file,type,bytes,provenance_license_status
+adaptation/assets/learning-to-adapt.png,png,90130,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/model-adaptation.png,png,79845,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/normalization-adaptation.png,png,57009,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/parameter-inference.png,png,82427,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/sample-adaptation.png,png,57022,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/tent-adaptation-surface.png,png,54330,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/tent-normalization-flow.png,png,50115,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/tent-shift-dark.png,png,25150,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/test-time-training.png,png,87120,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/trm-bandwidth-dark.png,png,5405,research-derived/custom visual; record exact paper/figure/license
+adaptation/assets/what-can-change.png,png,109756,research-derived/custom visual; record exact paper/figure/license
+assets/drop-of-water.glb,glb,3378724,Sketchfab-origin metadata; exact creator/model/license required
+assets/fire.jpg,jpg,84563,unknown - review SOURCES_AND_LICENSES.md
+assets/fonts/CaskoLuxuryDemo-Regular.otf,otf,45880,personal-use demo terms; verify permission
+assets/fonts/Font-Readme.pdf,pdf,585163,personal-use demo terms; verify permission
+assets/fonts/Montelgo-Regular.otf,otf,39788,personal/non-profit terms in bundled readme; verify permission
+assets/fonts/Street-Robot-Inline.ttf,ttf,13972,supplied license text requires clarification
+assets/gondor-tree.jpg,jpg,35185,unknown - review SOURCES_AND_LICENSES.md
+assets/interconnected-star.glb,glb,4667916,project/AI-generated; document outbound license
+assets/interconnected-web.glb,glb,944456,project-generated; build script available
+assets/neural-pathways.glb,glb,642048,source ownership unknown; generator says trimesh only
+assets/neural-pathways.jpg,jpg,320129,unknown - review SOURCES_AND_LICENSES.md
+image.png,png,3298,unknown - review SOURCES_AND_LICENSES.md
+inference-strategy/assets/compute-policy-summary.png,png,85797,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/game-of-24-results.png,png,74386,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/graph-vs-tree.png,png,76425,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/inference-budget.png,png,172959,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/parallel-aggregation.png,png,111777,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/sampling-diversity.png,png,126075,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/search-vs-parallel.png,png,134219,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/tree-growth-bars.png,png,74291,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/tree-growth-line.png,png,88502,research-derived/custom visual; record exact paper/figure/license
+inference-strategy/assets/tree-partial-states.png,png,88685,research-derived/custom visual; record exact paper/figure/license
+tree-graph/assets/constraint.jfif,jfif,33952,unknown - review SOURCES_AND_LICENSES.md
+tree-graph/assets/mini-maze.jpg,jpg,204665,unknown - review SOURCES_AND_LICENSES.md
+tree-graph/assets/planning.jfif,jfif,29790,unknown - review SOURCES_AND_LICENSES.md

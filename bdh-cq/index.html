@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Architecture — Interactive Lesson</title>
+  <link rel="stylesheet" href="bdh.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="../index.html#architectures">← Architecture</a>
+    <span class="topbar-spacer" aria-hidden="true"></span>
+    <span id="stepCount" class="step-count">01 / 14</span>
+  </header>
+
+  <main class="lesson-shell">
+    <aside class="rail" aria-hidden="true"><div id="railFill"></div></aside>
+    <div class="stage-wrap">
+
+      <!-- MODULE 1 -->
+      <section class="stage active content-heavy module-one" data-stage="1">
+        <p class="kicker">parameters / temporary inference-time information</p>
+        <h1>How can a model learn a new rule without changing its weights?</h1>
+
+        <div class="stage-explainer opening-copy">
+          <p>During training, a model develops parameters that determine how it processes information.</p>
+          <p>We can represent these learned parameters as:</p>
+          <div class="concept-callout"><strong>θ — the trained machinery</strong></div>
+          <p>But when a new problem arrives, θ does not necessarily need to be retrained.</p>
+          <p>A system can use information contained in the current input, previous context, or temporary internal state to behave differently for this particular problem.</p>
+          <div class="definition-pair">
+            <div><strong>Parameters</strong><span>what the machine learned during training</span></div>
+            <div><strong>Temporary state</strong><span>what the machine currently knows or is computing</span></div>
+          </div>
+          <p>The important question is therefore not simply: <strong>“Did the model change?”</strong></p>
+          <blockquote class="lesson-quote"><strong>What changed—and where was that information stored?</strong></blockquote>
+          <p>Transformer, BDH, and HRM answer that question in very different ways.</p>
+        </div>
+
+        <div class="interactive-lab locked-lab" id="lockedLab">
+          <div class="lab-heading">
+            <span>INTERACTIVE EXPERIMENT</span>
+            <h3>Locked Machine</h3>
+            <p>The trained machinery stays locked while temporary information changes the current computation.</p>
+          </div>
+
+          <div class="locked-theta" aria-label="Locked model parameters">
+            <span class="theta-symbol">θ</span><span class="padlock">▣</span>
+            <small>PARAMETERS LOCKED</small>
+          </div>
+
+          <div class="experiment-round active" id="lockedRoundOne">
+            <div class="demo-board compact-demo-board">
+              <code>AA → 2</code><code>BBBB → 4</code><code>CCCCCC → 6</code><code class="query">DDD → ?</code>
+            </div>
+            <button class="primary" id="runLengthRule">RUN WITH θ LOCKED</button>
+            <div class="prediction-result" id="lengthPrediction" aria-live="polite"><span>prediction</span><strong>?</strong></div>
+            <div class="round-question hidden" id="lengthQuestion">
+              <p>If θ never changed, where did the newly inferred rule live?</p>
+              <div class="choices compact" data-choice-group="length">
+                <button data-answer="wrong">In updated model weights</button>
+                <button data-answer="correct">In temporary context/state used during inference</button>
+                <button data-answer="wrong">In the training dataset</button>
+              </div>
+              <div class="feedback" id="lengthFeedback"></div>
+            </div>
+          </div>
+
+          <div class="experiment-round hidden" id="lockedRoundTwo">
+            <div class="demo-board shape-demo-board">
+              <code>■ → ■■</code><code>▲ → ▲▲</code><code>● → ●●</code><code class="query" id="diamondQuery">◆ → ?</code>
+            </div>
+            <div class="rule-discovery">The visible rule is simple: <strong>Duplicate the object.</strong></div>
+            <button class="primary" id="runDuplicateRule">APPLY THE NEW RULE</button>
+            <div class="duplicate-animation" id="duplicateAnimation"><span>◆</span><i>→</i><strong>?</strong></div>
+            <div class="round-question hidden" id="duplicateQuestion">
+              <p>The machine applied a rule it was just shown, but its trained weights never moved. What changed?</p>
+              <div class="choices compact" data-choice-group="duplicate">
+                <button data-answer="wrong">The trained parameters</button>
+                <button data-answer="correct">Something in the current computation</button>
+                <button data-answer="wrong">The training dataset</button>
+              </div>
+              <div class="feedback" id="duplicateFeedback"></div>
+            </div>
+          </div>
+
+          <div class="machine-silhouettes hidden" id="mysteryMachines" aria-live="polite">
+            <div><b>TRANSFORMER</b><span>?</span></div>
+            <div><b>BDH</b><span>?</span></div>
+            <div><b>HRM</b><span>?</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 2 -->
+      <section class="stage content-heavy module-two" data-stage="2">
+        <p class="kicker">Three machines. Three computational organizations.</p>
+        <h2>Architecture Foundation</h2>
+        <p class="stage-note module-subline">Three machines. Three computational organizations.</p>
+
+        <div class="stage-explainer architecture-copy">
+          <h3>Three ways to organize reasoning</h3>
+          <p>The same problem can be processed by very different computational structures.</p>
+          <div class="architecture-three">
+            <article>
+              <small>TRANSFORMER</small><h4>Attend</h4>
+              <p>A Transformer processes representations using <strong>self-attention and feed-forward transformations</strong>.</p>
+              <p>Attention allows each position to dynamically determine which other positions are relevant to its current representation.</p>
+              <blockquote>Route information according to relevance.</blockquote>
+            </article>
+            <article>
+              <small>BDH</small><h4>Interact</h4>
+              <p>Dragon Hatchling organizes computation as a <strong>scale-free network of locally interacting neuron particles</strong>.</p>
+              <p>Instead of treating every component as globally connected in the same way, computation emerges through structured local interactions and dynamic synaptic state.</p>
+              <blockquote>Let local interactions produce global computation.</blockquote>
+              <p class="technical-note">BDH is described as an attention-based state-space sequence architecture with Hebbian synaptic working memory.</p>
+            </article>
+            <article>
+              <small>HRM</small><h4>Coordinate</h4>
+              <p>Hierarchical Reasoning Model contains two interdependent recurrent modules operating at different timescales.</p>
+              <p><strong>H — high-level module</strong><br>Slow, abstract planning.</p>
+              <p><strong>L — low-level module</strong><br>Fast, detailed computation.</p>
+              <blockquote>Separate planning from execution while letting them communicate.</blockquote>
+            </article>
+          </div>
+        </div>
+
+        <div class="interactive-lab build-lab" id="buildLab">
+          <div class="lab-heading"><span>INTERACTIVE DEMO</span><h3>Build the Silhouette</h3><p>Build each reasoning machine using only its defining parts.</p></div>
+          <div class="silhouette-grid">
+            <div class="machine-build" data-machine="transformer"><h4>TRANSFORMER</h4><div class="machine-canvas transformer-canvas"><div class="machine-placeholder">drop defining parts here</div></div><div class="machine-status">0 / 2 parts</div></div>
+            <div class="machine-build" data-machine="bdh"><h4>BDH</h4><div class="machine-canvas bdh-canvas"><div class="machine-placeholder">drop defining parts here</div></div><div class="machine-status">0 / 2 parts</div></div>
+            <div class="machine-build" data-machine="hrm"><h4>HRM</h4><div class="machine-canvas hrm-canvas"><div class="machine-placeholder">drop defining parts here</div></div><div class="machine-status">0 / 3 parts</div></div>
+          </div>
+          <div class="parts-tray" id="partsTray">
+            <button draggable="true" data-part="Attention">Attention</button>
+            <button draggable="true" data-part="Feed-Forward">Feed-Forward</button>
+            <button draggable="true" data-part="Local Nodes">Local Nodes</button>
+            <button draggable="true" data-part="Synapses">Synapses</button>
+            <button draggable="true" data-part="H Module">H Module</button>
+            <button draggable="true" data-part="L Module">L Module</button>
+            <button draggable="true" data-part="Recurrence">Recurrence</button>
+          </div>
+          <div class="build-feedback" id="buildFeedback">Drag a part, or click a part and then a machine.</div>
+          <button class="primary hidden" id="runSameSignal">RUN THE SAME SIGNAL</button>
+          <div class="same-signal hidden" id="sameSignal">
+            <article><b>TRANSFORMER — ATTEND</b><div class="attention-pulse"><i></i><i></i><i></i><i></i></div><span>Dynamic relevance connections form across representations.</span></article>
+            <article><b>BDH — INTERACT</b><div class="local-pulse"><i></i><i></i><i></i><i></i><i></i></div><span>The signal propagates through neighboring nodes and synaptic paths.</span></article>
+            <article><b>HRM — COORDINATE</b><div class="hrm-pulse"><i>H</i><strong>↕</strong><i>L</i></div><span>L cycles quickly while H updates more slowly.</span></article>
+            <p>Same input. Different machinery.</p>
+            <blockquote>Now that the machines are built, what stays fixed, what remembers, and what changes while they reason?</blockquote>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 3 -->
+      <section class="stage content-heavy module-three" data-stage="3">
+        <p class="kicker">parameters / memory / workspace</p>
+        <h2>What stays fixed? What persists? What is changing now?</h2>
+        <div class="stage-explainer role-copy">
+          <p>Not everything inside a model serves the same role.</p>
+          <p>During inference, it is useful to distinguish three concepts.</p>
+          <div class="role-definition-grid">
+            <article><small>PARAMETERS</small><h3>What training built.</h3><strong>θ</strong><p>Weights encode the computational transformations learned during training. For this chapter, imagine the trained parameters as the underlying machinery.</p></article>
+            <article><small>MEMORY</small><h3>Information that remains available long enough to affect later computation.</h3><p>Architectures implement memory differently. It may involve previously represented context, recurrent hidden state, or dynamic synaptic state.</p></article>
+            <article><small>WORKSPACE</small><h3>The representation currently being transformed while solving the problem.</h3><p>It is temporary and changes as computation proceeds.</p></article>
+          </div>
+          <p>These are <strong>conceptual roles</strong>, not universal components with identical names. A Transformer does not contain a literal box called <em>Workspace</em>. BDH and HRM do not store information in precisely the same way.</p>
+          <blockquote class="lesson-quote">What stays fixed? What persists? What is currently changing?</blockquote>
+        </div>
+
+        <div class="interactive-lab timeline-lab" id="timelineLab">
+          <div class="lab-heading"><span>INTERACTIVE SEGMENT</span><h3>Inside the Machine: A Timeline Scrubber</h3><p>Move through time to see which roles appear, persist, and change.</p></div>
+          <div class="timeline-objects">
+            <button id="timelineTheta" class="timeline-object theta active-object"><small>PARAMETERS θ</small><strong>θ</strong><span>trained machinery</span></button>
+            <div id="timelineMemory" class="timeline-object"><small>MEMORY / STATE</small><strong>M</strong><span>information carried forward</span></div>
+            <div id="timelineWorkspace" class="timeline-object"><small>WORKSPACE</small><strong>W</strong><span>information actively transformed</span></div>
+          </div>
+          <div class="timeline-track-labels"><span>TRAINING</span><span>TEST CONTEXT</span><span>QUERY</span><span>REASONING</span><span>ANSWER</span></div>
+          <input id="timelineScrubber" class="timeline-scrubber" type="range" min="0" max="5" value="0" step="1" disabled aria-label="Timeline scrubber">
+          <div class="timeline-scene" id="timelineScene"></div>
+          <div class="timeline-question" id="timelineQuestion">
+            <p>Which information survives after training ends?</p>
+            <span>Click <strong>θ</strong> above to unlock the timeline.</span>
+          </div>
+          <div class="choices compact hidden" id="timelineContextChoices">
+            <button data-correct="false">Parameters θ</button>
+            <button data-correct="true">Temporary information available during inference</button>
+          </div>
+          <div class="choices compact hidden" id="timelineFinalChoices">
+            <button data-persist="theta">θ persists</button>
+            <button data-persist="all">Everything must persist unchanged</button>
+            <button data-persist="none">Nothing needs to persist</button>
+          </div>
+          <div class="feedback" id="timelineFeedback"></div>
+          <p class="scrub-back-hint hidden" id="scrubBackHint">Now inspect the machine's history. Drag backward and forward freely.</p>
+        </div>
+      </section>
+
+      <!-- MODULE 4 -->
+      <section class="stage content-heavy module-four" data-stage="4">
+        <p class="kicker">temporary information carriers</p>
+        <h2>How Does the Machine Remember?</h2>
+        <div class="stage-explainer memory-copy">
+          <h3>Information can disappear—or remain useful</h3>
+          <p>Suppose the machine is shown:</p>
+          <div class="inline-example"><code>A → RED</code><code>B → BLUE</code><code>C → GREEN</code><code>B → ?</code><strong>BLUE</strong></div>
+          <p>But the interesting question is not the answer. It is:</p>
+          <blockquote class="lesson-quote">How was the information “B → BLUE” still available when it was needed?</blockquote>
+          <p>The model's trained parameters do not need to be rewritten just to remember this particular example. Instead, each architecture has its own way of carrying information through the current computation.</p>
+
+          <div class="memory-architecture-copy">
+            <article>
+              <small>TRANSFORMER</small><h4>Keep the earlier context accessible</h4>
+              <p>A Transformer can let the current representation retrieve information from earlier representations using <strong>attention</strong>.</p>
+              <div class="micro-flow"><code>B → ?</code><i>attends back toward</i><code>B → BLUE</code></div>
+              <p>In autoregressive Transformers, implementations often keep the already-computed <strong>keys and values of previous tokens</strong> in a <strong>KV cache</strong>. This avoids recomputing those earlier representations every time a new token is generated.</p>
+              <blockquote><strong>The context contains the information.</strong><br>Attention retrieves from it.<br>The KV cache makes previously computed attention state reusable.</blockquote>
+              <p class="technical-note">A KV cache is temporary inference state—not new knowledge written into the model's trained weights. This is more precise than saying simply “the Transformer remembers through the KV cache.”</p>
+            </article>
+            <article>
+              <small>BDH</small><h4>Let recent experience alter temporary synaptic state</h4>
+              <p>BDH uses a more explicit form of inference-time working memory. As information is processed, <strong>synaptic state can change through Hebbian-style plasticity</strong>.</p>
+              <div class="synapse-example"><span>B ─── BLUE</span><i>after association</i><strong>B ═══ BLUE</strong></div>
+              <p>The architecture has not permanently retrained itself. Information has been written into a <strong>dynamic synaptic working state</strong> that can influence later computation.</p>
+              <blockquote>BDH can carry task information in changing synaptic state during inference.</blockquote>
+            </article>
+            <article>
+              <small>HRM</small><h4>Carry information through recurrent computation</h4>
+              <p>HRM contains two interacting recurrent modules: <strong>H</strong>, a slower-changing higher-level state, and <strong>L</strong>, a faster-changing lower-level state.</p>
+              <div class="micro-flow stacked"><code>H₀ → H₁ → H₂ → H₃</code><code>L₀ → L₁ → L₂ → L₃ → …</code></div>
+              <p>Because these modules are recurrent, their current hidden states are passed forward into later computational steps.</p>
+              <blockquote>HRM carries information through evolving recurrent hidden states.</blockquote>
+              <p class="technical-note">That is not the same mechanism as BDH's dynamic synaptic working memory.</p>
+            </article>
+          </div>
+
+          <div class="memory-comparison">
+            <div><small>TRANSFORMER</small><strong>CONTEXT</strong><span>attention can retrieve from it</span></div>
+            <div><small>BDH</small><strong>SYNAPTIC STATE</strong><span>associations can change</span></div>
+            <div><small>HRM</small><strong>RECURRENT STATE</strong><span>state flows through time</span></div>
+          </div>
+          <blockquote class="lesson-quote final-copy-quote">All three can use information from earlier computation. What differs is where that information lives and how it is carried forward.</blockquote>
+        </div>
+
+        <div class="interactive-lab eraser-lab" id="eraserLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>MEMORY ERASER</h3><p>Three machines learned the same temporary association. Find where each one is keeping it.</p></div>
+          <div class="eraser-demos"><code>A → RED</code><code>B → BLUE</code><code>C → GREEN</code><i>then</i><code>B → ?</code></div>
+
+          <div class="eraser-machines">
+            <article class="eraser-machine" data-eraser-machine="transformer">
+              <h4>TRANSFORMER</h4>
+              <div class="transformer-memory-visual"><span>A → RED</span><span class="match">B → BLUE</span><span>C → GREEN</span><b class="beam">attention</b></div>
+              <div class="machine-output">BLUE ✓</div>
+              <div class="theta-mini">θ 🔒</div>
+            </article>
+            <article class="eraser-machine" data-eraser-machine="bdh">
+              <h4>BDH</h4>
+              <div class="bdh-network"><i></i><i></i><i class="strong-node">B</i><b class="strong-edge"></b><i class="blue-node">BLUE</i><i></i></div>
+              <div class="machine-output">BLUE ✓</div>
+              <div class="theta-mini">θ 🔒</div>
+            </article>
+            <article class="eraser-machine" data-eraser-machine="hrm">
+              <h4>HRM</h4>
+              <div class="hrm-state-visual"><div>H₀ → H₁ → H₂</div><strong>↕</strong><div>L₀ → L₁ → L₂ → L₃</div></div>
+              <div class="machine-output">BLUE ✓</div>
+              <div class="theta-mini">θ 🔒</div>
+            </article>
+          </div>
+
+          <div class="eraser-controls">
+            <button data-erase="transformer">ERASE TRANSFORMER CONTEXT</button>
+            <button data-erase="bdh">ERASE BDH SYNAPTIC STATE</button>
+            <button data-erase="hrm">RESET HRM RECURRENT STATE</button>
+          </div>
+          <div class="eraser-feedback" id="eraserFeedback">Erase one carrier at a time. The trained parameters remain locked.</div>
+
+          <div class="match-challenge hidden" id="matchChallenge">
+            <h4>Which machine did you erase?</h4>
+            <div class="broken-clues">
+              <div data-clue="transformer"><small>MACHINE A</small><span>Earlier representations disappeared.</span><select><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></div>
+              <div data-clue="bdh"><small>MACHINE B</small><span>Temporary connection strengths reset.</span><select><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></div>
+              <div data-clue="hrm"><small>MACHINE C</small><span>Hidden recurrent states returned to initialization.</span><select><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></div>
+            </div>
+            <button class="ghost" id="checkMatch">CHECK MATCH</button>
+            <div class="feedback" id="matchFeedback"></div>
+          </div>
+
+          <div class="wrong-thing hidden" id="wrongThingChallenge">
+            <h4>Final challenge — erase the temporary memory, not the machine.</h4>
+            <div class="wrong-thing-grid">
+              <article data-final-machine="transformer"><small>TRANSFORMER</small><button>ERASE θ</button><button data-correct>ERASE CONTEXT</button><button>ERASE OUTPUT</button></article>
+              <article data-final-machine="bdh"><small>BDH</small><button>DELETE NODES</button><button data-correct>RESET DYNAMIC SYNAPTIC STATE</button><button>CHANGE TRAINING DATA</button></article>
+              <article data-final-machine="hrm"><small>HRM</small><button data-correct>RESET RECURRENT STATE</button><button>DELETE H MODULE</button><button>RETRAIN θ</button></article>
+            </div>
+            <div class="feedback" id="wrongThingFeedback"></div>
+          </div>
+
+          <div class="memory-final hidden" id="memoryFinal">
+            <div class="memory-comparison final-map">
+              <div><small>TRANSFORMER</small><strong>CONTEXT</strong><span>ATTENTION RETRIEVES</span></div>
+              <div><small>BDH</small><strong>SYNAPTIC STATE</strong><span>LOCAL ASSOCIATIONS</span></div>
+              <div><small>HRM</small><strong>RECURRENT STATE</strong><span>H ↔ L CARRY STATE</span></div>
+            </div>
+            <h4>ERASING THE MEMORY DID NOT ERASE THE MACHINE.</h4>
+            <div class="locked-theta mini"><span class="theta-symbol">θ</span><span class="padlock">▣</span><small>THE TRAINED MACHINERY REMAINED</small></div>
+            <blockquote>What changed was the temporary information available to computation.</blockquote>
+            <p class="transition-line">The machine remembers the task. Now the actual query arrives.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 5 -->
+      <section class="stage content-heavy module-five" data-stage="5">
+        <p class="kicker">05 / 14</p>
+        <h2>The Query Arrives</h2>
+
+        <div class="stage-explainer architecture-copy query-arrives-copy">
+          <p>Suppose the system has already processed useful information about a task.</p>
+          <p>Then the actual query arrives:</p>
+          <div class="inline-flow query-glyph"><strong>◆ → ?</strong></div>
+          <p>From the outside, Transformer, BDH, and HRM receive the <strong>same problem</strong>.</p>
+          <p>But once the input enters the model, the computational paths diverge.</p>
+          <p>The architecture determines:</p>
+          <ul class="lesson-bullets"><li>how the query is represented,</li><li>what previous information it can interact with,</li><li>and what internal computation begins next.</li></ul>
+
+          <div class="architecture-three query-architecture-three">
+            <article>
+              <small>TRANSFORMER</small><h4>Build a representation, then relate it to context</h4>
+              <p>The query is converted into an internal representation.</p>
+              <p>Inside Transformer layers, <strong>self-attention</strong> allows that representation to interact with other accessible representations, while feed-forward transformations continue modifying it.</p>
+              <div class="mini-stack"><code>Query representation</code><i>↓</i><code>Attention to relevant context</code><i>↓</i><code>Updated representation</code></div>
+              <blockquote><strong>The query joins a system in which relevance-based information routing is central.</strong></blockquote>
+              <p>The Transformer architecture is built from stacked attention and feed-forward sublayers.</p>
+            </article>
+            <article>
+              <small>BDH</small><h4>Inject activity into an evolving network</h4>
+              <p>In BDH, the query enters a <strong>network of locally interacting neuron particles</strong>.</p>
+              <p>The new input changes activity inside that network while interacting with its current state, including temporary synaptic structure built during previous processing.</p>
+              <pre class="concept-pre">existing network state
+        +
+      query
+        ↓
+new pattern of activity</pre>
+              <p>The query therefore does not simply “look up an answer.”</p>
+              <blockquote><strong>It perturbs an already evolving computational system.</strong></blockquote>
+              <p>BDH is described as a scale-free graph of locally interacting units with inference-time synaptic working memory.</p>
+            </article>
+            <article>
+              <small>HRM</small><h4>Initialize hierarchical reasoning</h4>
+              <p>In HRM, the input is embedded into representations used by two interacting recurrent modules:</p>
+              <p><strong>H — high-level state</strong><br><strong>L — low-level state</strong></p>
+              <p>The query therefore enters a system where computation will unfold repeatedly between a slower high-level process and a faster low-level process.</p>
+              <pre class="concept-pre">QUERY
+  ↓
+representation
+  ↓
+H ↔ L</pre>
+            </article>
+          </div>
+          <blockquote class="lesson-quote final-copy-quote"><strong>Same query. Different machinery begins operating on it.</strong></blockquote>
+        </div>
+
+        <div class="interactive-lab query-port-lab" id="queryPortLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Query Port</h3><p>The problem is identical. Send it into each machine and inspect what happens first.</p></div>
+          <div id="queryToken" class="query-token" draggable="true" aria-label="Draggable query">◆ → ?<small>DRAG OR CLICK, THEN CHOOSE A PORT</small></div>
+          <div class="query-ports">
+            <button class="query-port" data-query-port="transformer"><small>TRANSFORMER</small><strong>ATTENTION PORT</strong><span class="port-visual attention-port"><i></i><i></i><i></i><i></i></span><em>waiting for query</em></button>
+            <button class="query-port" data-query-port="bdh"><small>BDH</small><strong>LOCAL NETWORK PORT</strong><span class="port-visual bdh-port"><i></i><i></i><i></i><i></i><i></i></span><em>waiting for query</em></button>
+            <button class="query-port" data-query-port="hrm"><small>HRM</small><strong>H / L PORT</strong><span class="port-visual hrm-port"><b>H₀</b><i>↕</i><b>L₀</b></span><em>waiting for query</em></button>
+          </div>
+          <div class="query-port-readout" id="queryPortReadout">Send the same query into all three machines.</div>
+
+          <div class="blind-challenge hidden" id="queryBlindChallenge">
+            <h4>Final challenge — which machine just received the query?</h4>
+            <div class="blind-traces" id="queryBlindTraces">
+              <article data-trace="transformer"><div class="trace-icon trace-attention"><i></i><i></i><i></i></div><select><option value="">Choose machine</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></article>
+              <article data-trace="bdh"><div class="trace-icon trace-local"><i></i><i></i><i></i><i></i></div><select><option value="">Choose machine</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></article>
+              <article data-trace="hrm"><div class="trace-icon trace-hrm"><b>H</b><i>↕</i><b>L</b></div><select><option value="">Choose machine</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></article>
+            </div>
+            <button class="ghost" id="checkQueryBlind">CHECK MATCH</button>
+            <div class="feedback" id="queryBlindFeedback"></div>
+          </div>
+          <div class="module-takeaway hidden" id="queryPortTakeaway"><strong>The query is the same. Architecture determines what happens next.</strong><span>But once the query enters, where does the actual computation happen?</span></div>
+        </div>
+      </section>
+
+      <!-- MODULE 6 -->
+      <section class="stage content-heavy module-six" data-stage="6">
+        <p class="kicker">06 / 14</p>
+        <h2>Where Does the Reasoning Happen?</h2>
+        <p class="stage-note">The internal representations that are transformed between input and answer.</p>
+
+        <div class="stage-explainer architecture-copy hidden-room-copy">
+          <h3>Between the query and the answer lies internal computation.</h3>
+          <div class="inline-flow"><strong>INPUT → ? → OUTPUT</strong></div>
+          <p>The <strong>?</strong> is where representations are transformed.</p>
+          <p>When we say a model is “reasoning internally,” we are referring to the computation occurring in those internal representations—not necessarily to a visible sentence such as:</p>
+          <blockquote>“First I will do X, then Y.”</blockquote>
+
+          <div class="architecture-three reasoning-architecture-three">
+            <article><small>TRANSFORMER</small><h4>Successive hidden representations</h4><p>A Transformer repeatedly transforms representations through its layers.</p><div class="mini-stack horizontal"><code>X₀</code><i>→</i><code>X₁</code><i>→</i><code>X₂</code><i>→</i><code>…</code><i>→</i><code>Xₙ</code></div><p>Each layer combines <strong>attention</strong> with <strong>feed-forward transformation</strong> to produce updated hidden representations.</p><p>In an autoregressive language model, additional forward evaluations occur as new output tokens are generated.</p><blockquote><strong>Useful computation occurs inside changing hidden representations before we see the output.</strong></blockquote></article>
+            <article><small>BDH</small><h4>Evolving network activity and state</h4><p>BDH's computation is distributed across its network.</p><p>Sparse node activations, local interactions and dynamic synaptic state jointly influence what happens next.</p><pre class="concept-pre network-pre">○ ─ ○
+  ╲ │
+○ → ● → ○
+    ↓
+    ○</pre><blockquote><strong>The computation exists in the evolving network state.</strong></blockquote></article>
+            <article><small>HRM</small><h4>Recurrent latent computation</h4><p>HRM makes repeated internal computation especially explicit.</p><p>Its high-level and low-level modules recursively update their hidden states. The high-level module changes more slowly; the low-level module performs faster detailed computation.</p><pre class="concept-pre">H₀ ─────→ H₁
+ ↓         ↓
+L₀→L₁→L₂→L₃</pre><p>These intermediate states do not have to be translated into a textual Chain-of-Thought.</p></article>
+          </div>
+          <blockquote class="lesson-quote final-copy-quote"><strong>Reasoning can occur as transformations of hidden state rather than as visible reasoning text.</strong></blockquote>
+        </div>
+
+        <div class="interactive-lab hidden-room-lab" id="hiddenRoomLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Hidden Room</h3><p>If no words are being produced, is the machine still computing?</p></div>
+          <div class="output-switch off" id="outputSwitch"><span>OUTPUT SCREEN</span><strong>OFF</strong></div>
+          <button class="primary" id="runHiddenRoom">SEND QUERY WITH OUTPUT OFF</button>
+          <div class="hidden-machines" id="hiddenMachines">
+            <article data-hidden-machine="transformer"><small>TRANSFORMER</small><h4>Hidden layers</h4><div class="layer-chain"><b>L1</b><i>→</i><b>L2</b><i>→</i><b>L3</b><i>→</i><b>L4</b></div><button class="ghost freeze-transformer" disabled>FREEZE</button><p class="hidden-state-readout">Current internal representation: <strong>X₀</strong></p></article>
+            <article data-hidden-machine="bdh"><small>BDH</small><h4>Network activity</h4><div class="hidden-bdh-network"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>region A → region C → region F</p></article>
+            <article data-hidden-machine="hrm"><small>HRM</small><h4>Recurrent states</h4><div class="state-meters"><label>H <span><i id="hMeter"></i></span></label><label>L <span><i id="lMeter"></i></span></label></div><p id="hrmHiddenState">H₀ / L₀</p></article>
+          </div>
+          <div class="mid-question hidden" id="hiddenRoomQuestion"><p>Which statement is correct?</p><div class="choices compact" id="hiddenRoomChoices"><button>No answer text means no reasoning occurred.</button><button data-correct="true">Internal representations can change without producing visible reasoning text.</button><button>Only Transformer can reason internally.</button></div><div class="feedback" id="hiddenRoomFeedback"></div></div>
+          <button class="primary hidden" id="turnOutputOn">TURN OUTPUT BACK ON</button>
+          <div class="hidden-output-reveal hidden" id="hiddenOutputReveal"><span>TRANSFORMER → ANSWER</span><span>BDH → ANSWER</span><span>HRM → ANSWER</span></div>
+          <div class="module-takeaway hidden" id="hiddenRoomTakeaway"><strong>Visible output is only the end of the computation.</strong><span>If computation happens internally, how does information travel through that machinery?</span></div>
+        </div>
+      </section>
+
+      <!-- MODULE 7 -->
+      <section class="stage content-heavy module-seven" data-stage="7">
+        <p class="kicker">07 / 14</p>
+        <h2>How Does Information Move?</h2>
+        <p class="stage-note">The communication topology of each architecture.</p>
+
+        <div class="stage-explainer architecture-copy signal-move-copy">
+          <p>Imagine five pieces of information:</p><div class="inline-flow"><strong>A &nbsp; B &nbsp; C &nbsp; D &nbsp; E</strong></div>
+          <p>Suppose the information in <strong>A</strong> becomes important for processing <strong>E</strong>.</p>
+          <p>Different architectures provide different routes through which that influence can occur.</p>
+          <div class="architecture-three signal-architecture-three">
+            <article><small>TRANSFORMER</small><h4>Dynamic relevance routes</h4><p>Self-attention computes relationships between representations.</p><p>A representation can assign greater influence to some accessible positions and less to others. So the effective routes depend on the current input.</p><pre class="concept-pre">A ─────────→ E
+B ──→ D
+C ─────→ A</pre><p>The route is not simply “move one step to the neighbor.” It is formed according to attention relationships.</p></article>
+            <article><small>BDH</small><h4>Local interaction builds longer-range influence</h4><p>BDH starts from a different organization. Its neuron particles form a graph where individual units interact <strong>locally</strong>.</p><div class="inline-flow"><strong>A → B → C → E</strong></div><p>Because the graph has non-uniform connectivity, some nodes can also serve as highly connected hubs.</p><blockquote><strong>Global behavior can emerge from structured local communication.</strong></blockquote></article>
+            <article><small>HRM</small><h4>Information moves across timescales</h4><p>HRM's defining information flow is hierarchical.</p><p>Fast computation occurs inside the L module. Its evolving state interacts with the slower H module. The high-level state then influences later low-level computation.</p><pre class="concept-pre">      H
+      ↑↓
+L → L → L → L</pre><p>Information moves not just across representations, but also between <strong>levels operating at different timescales</strong>.</p></article>
+          </div>
+        </div>
+
+        <div class="interactive-lab deliver-signal-lab" id="deliverSignalLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Deliver the Signal</h3><p>Get information in A to influence E through each architecture.</p></div>
+          <div class="signal-rounds">
+            <article class="signal-round active" data-signal-round="transformer"><small>TRANSFORMER ROUND</small><h4>Inspect E's attention route</h4><div class="attention-route"><b>A</b><b>B</b><b>C</b><b>D</b><strong>E</strong><span id="attentionBeam"></span></div><label class="attention-dial">ATTENTION TO A <input id="attentionDial" type="range" min="0" max="100" value="10"><output id="attentionValue">10%</output></label><div class="signal-feedback" id="transformerSignalFeedback">Increase E's attention to A.</div></article>
+            <article class="signal-round" data-signal-round="bdh"><small>BDH ROUND</small><h4>Propagate one local step at a time</h4><div class="bdh-route" id="bdhRoute"><b data-bdh-node="A">A</b><i>—</i><b data-bdh-node="B">B</b><i>—</i><b data-bdh-node="C">C</b><i>—</i><b data-bdh-node="E">E</b><span class="branch">B<br>│<br>D</span></div><button class="primary" id="propagateBdh">PROPAGATE</button><div class="signal-feedback" id="bdhSignalFeedback">Signal starts at A.</div></article>
+            <article class="signal-round" data-signal-round="hrm"><small>HRM ROUND</small><h4>Move detail across levels and timescales</h4><div class="hrm-transfer" id="hrmTransfer"><b data-level="l1">L · clue</b><i>→</i><b data-level="h">H · abstraction</b><i>→</i><b data-level="l2">L · next cycle</b></div><div class="hrm-transfer-controls"><button class="ghost" id="transferUp">TRANSFER L → H</button><button class="ghost" id="transferDown" disabled>TRANSFER H → L</button></div><div class="signal-feedback" id="hrmSignalFeedback">A useful detail currently lives in L.</div></article>
+          </div>
+          <div class="signal-progress" id="signalProgress"><span class="active">TRANSFORMER</span><span>BDH</span><span>HRM</span></div>
+          <div class="blind-challenge hidden" id="signalBlindChallenge"><h4>Final blind round</h4><p>Match each route to its architecture.</p><div class="blind-route-matches"><label>dynamic long-range relevance links<select data-route-match="transformer"><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></label><label>local graph propagation<select data-route-match="bdh"><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></label><label>fast/slow hierarchical recurrence<select data-route-match="hrm"><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></label></div><button class="ghost" id="checkSignalBlind">CHECK ROUTES</button><div class="feedback" id="signalBlindFeedback"></div></div>
+          <div class="module-takeaway hidden" id="signalTakeaway"><strong>Architecture is partly a rule for who can communicate with whom—and how.</strong><span>Now that information is moving, can you identify which part is carrying each kind of information?</span></div>
+        </div>
+      </section>
+
+      <!-- MODULE 8 -->
+      <section class="stage content-heavy module-eight" data-stage="8">
+        <p class="kicker">08 / 14</p>
+        <h2>Which Part Carries This Information?</h2>
+        <p class="stage-note">Retrieval and discrimination.</p>
+        <div class="stage-explainer architecture-copy forensic-copy">
+          <p>During computation, different information can belong to different places.</p>
+          <p>You have now seen:</p>
+          <div class="carrier-grid"><div><strong>θ — trained machinery</strong><span>information learned during training</span></div><div><strong>context / temporary state</strong><span>information retained during the current task</span></div><div><strong>active representations</strong><span>information currently being transformed</span></div><div><strong>architecture-specific structures</strong><span>attention · dynamic synaptic state · H / L recurrent states</span></div></div>
+          <p>The challenge now is to stop thinking:</p><blockquote>“The model remembers it.”</blockquote>
+          <p>and instead ask:</p><blockquote class="lesson-quote"><strong>Which mechanism is carrying it right now?</strong></blockquote>
+        </div>
+
+        <div class="interactive-lab signal-forensics-lab" id="signalForensicsLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Signal Forensics</h3><p>A machine has been frozen mid-computation. Locate where the highlighted information is being carried.</p></div>
+          <div class="forensic-case" id="forensicCase">
+            <div class="forensic-case-head"><span id="forensicIndex">CASE 1 / 5</span><strong id="forensicArchitecture">TRAINING KNOWLEDGE</strong></div>
+            <p id="forensicClue">“This information was learned from millions of training examples and exists before the current task arrives.”</p>
+            <div class="forensic-machine" id="forensicMachine"></div>
+            <div class="forensic-targets" id="forensicTargets"></div>
+            <div class="feedback" id="forensicFeedback"></div>
+          </div>
+          <div class="blind-challenge hidden" id="forensicFinal"><h4>Final forensic case</h4><p>Architecture labels disappear. Identify both architecture and role.</p><div class="final-forensic-visual"><span class="changing-synapse"></span><b>changing synaptic connection</b></div><div class="forensic-final-selects"><select id="forensicArchSelect"><option value="">Architecture</option><option>Transformer</option><option>BDH</option><option>HRM</option></select><select id="forensicRoleSelect"><option value="">Role</option><option>permanent parameters</option><option>temporary working state</option><option>output prediction</option></select></div><button class="ghost" id="checkForensicFinal">IDENTIFY CARRIER</button><div class="feedback" id="forensicFinalFeedback"></div></div>
+          <div class="module-takeaway hidden" id="forensicTakeaway"><strong>“The model knows it” is not enough. Ask where the information currently lives.</strong><span>Once the internal computation is complete, how does hidden state become an observable answer?</span></div>
+        </div>
+      </section>
+
+      <!-- MODULE 9 -->
+      <section class="stage content-heavy module-nine" data-stage="9">
+        <p class="kicker">09 / 14</p>
+        <h2>From Internal State to Prediction</h2>
+        <p class="stage-note">The distinction between internal representation and output representation.</p>
+        <div class="stage-explainer architecture-copy decoder-copy">
+          <h3>The model's internal state is not yet the answer.</h3>
+          <p>Inside the machine, information exists as numerical representations.</p>
+          <p>Those internal representations may encode everything required to solve the problem—but they still have to be converted into something the task expects.</p>
+          <div class="output-types"><span>a token</span><span>a class label</span><span>a grid</span><span>an action</span></div>
+          <p>This final conversion is performed through an <strong>output mapping/head/decoder</strong>, depending on the model and task.</p>
+          <div class="architecture-three decoder-architecture-three">
+            <article><small>TRANSFORMER</small><h4>Language generation</h4><p>For language generation, the current hidden representation is typically projected into scores over the vocabulary.</p><pre class="concept-pre">hidden representation
+        ↓
+vocabulary scores
+        ↓
+probabilities
+        ↓
+next token</pre></article>
+            <article><small>BDH</small><h4>Internal state → task output</h4><p>The evolving BDH representation similarly has to be mapped from the network's internal state into the output required by the task.</p><p>The important distinction is not a special “BDH decoder.”</p><blockquote><strong>network state ≠ observable answer</strong></blockquote></article>
+            <article><small>HRM</small><h4>Output head</h4><p>HRM's published sequence-to-sequence implementation includes an output head that transforms hidden states into token probability distributions.</p><pre class="concept-pre">final recurrent state
+       ↓
+output head
+       ↓
+prediction</pre></article>
+          </div>
+          <blockquote class="lesson-quote final-copy-quote"><strong>Internal computation creates a representation. Decoding exposes a prediction.</strong></blockquote>
+        </div>
+
+        <div class="interactive-lab decoder-dock-lab" id="decoderDockLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Decoder Dock</h3><p>Three machines have finished thinking. Their output cable is disconnected.</p></div>
+          <div class="opaque-state"><small>INTERNAL STATE</small><strong>████▒▒██▒█</strong><i>?</i><small>OUTPUT</small></div>
+          <p class="decoder-question">Can you read the answer directly? <strong>No — connect the correct output mapping.</strong></p>
+          <div class="dock-tabs" id="dockTabs"><button class="active" data-dock="language">LANGUAGE</button><button data-dock="class">CLASSIFICATION</button><button data-dock="grid">GRID TASK</button></div>
+          <div class="dock-stage" id="dockStage">
+            <div class="dock-pipeline"><span>hidden state</span><i>→</i><button class="dock-head" data-head="language">VOCABULARY HEAD</button><button class="dock-head" data-head="class">CLASS HEAD</button><button class="dock-head" data-head="grid">GRID DECODER</button><i>→</i><strong id="dockOutput">?</strong></div>
+            <div class="dock-detail" id="dockDetail">Choose an output mapping.</div>
+          </div>
+          <button class="ghost incompatible-dock" id="incompatibleDock">TRY INCOMPATIBLE: GRID STATE → WORD OUTPUT</button>
+          <div class="feedback" id="dockFeedback"></div>
+          <div class="module-takeaway hidden" id="decoderTakeaway"><strong>Reasoning happens inside. Prediction is what gets exposed outside.</strong><span>You now know every stage individually. What happens when the three machines solve the same problem side-by-side?</span></div>
+        </div>
+      </section>
+
+      <!-- MODULE 10 -->
+      <section class="stage content-heavy" data-stage="10">
+        <p class="kicker">10 / 14</p><h2>Same Problem, Three Machines</h2>
+        <div class="stage-explainer compare-copy">
+          <p><strong>Integration through controlled comparison.</strong></p>
+          <h3>Hold the problem constant.</h3>
+          <p>To compare architectures fairly at a conceptual level, give them the <strong>same task</strong>. Then watch only what changes:</p>
+          <blockquote class="lesson-quote"><strong>the organization of computation.</strong></blockquote>
+          <div class="architecture-three replay-routes">
+            <article><small>TRANSFORMER</small><h4>Represent → Attend → Transform → Output</h4><p>Dynamic relevance routing through stacked attention and feed-forward transformations.</p></article>
+            <article><small>BDH</small><h4>Activate → Interact locally → Evolve state → Output</h4><p>Local graph interaction with evolving network activity and synaptic state.</p></article>
+            <article><small>HRM</small><h4>Initialize → Fast L computation ↕ Slow H coordination → Output</h4><p>Hierarchical recurrence across fast and slow computational timescales.</p></article>
+          </div>
+          <p class="conceptual-note">These are <strong>conceptual diagrams</strong>, not full implementation graphs.</p>
+          <p>The point is not to claim “Architecture X is always better.” The point is:</p>
+          <blockquote class="lesson-quote"><strong>The same external problem can be solved through fundamentally different internal computational organizations.</strong></blockquote>
+        </div>
+
+        <div class="interactive-lab replay-lab" id="threeMachineReplay">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Three-Machine Replay</h3><p>One input. Three machines. Scrub through the same computation timeline.</p></div>
+          <div class="same-input-card"><small>SAME INPUT</small><strong>◆ → ?</strong><button class="primary" id="runAllMachines">RUN ALL</button></div>
+          <div class="replay-timeline-wrap hidden" id="replayTimelineWrap">
+            <div class="replay-labels"><span>INPUT</span><span>EARLY</span><span>MIDDLE</span><span>LATE</span><span>OUTPUT</span></div>
+            <input id="replayScrubber" class="replay-scrubber" type="range" min="0" max="4" value="0" step="1" aria-label="Unified machine timeline">
+            <div class="replay-machines">
+              <article data-replay-machine="transformer"><small>TRANSFORMER</small><div class="replay-visual replay-transformer"><i></i><i></i><i></i><i></i></div><strong class="replay-state">Waiting</strong></article>
+              <article data-replay-machine="bdh"><small>BDH</small><div class="replay-visual replay-bdh"><i></i><i></i><i></i><i></i><i></i><i></i></div><strong class="replay-state">Waiting</strong></article>
+              <article data-replay-machine="hrm"><small>HRM</small><div class="replay-visual replay-hrm"><b>H</b><div><i>L₀</i><i>L₁</i><i>L₂</i></div></div><strong class="replay-state">Waiting</strong></article>
+            </div>
+            <div class="feedback replay-feedback" id="replayFeedback"></div>
+          </div>
+          <div class="replay-comparison hidden" id="replayComparison">
+            <h4>Comparison challenge</h4>
+            <p>Drag each card under the architecture it describes. One belongs to <strong>NONE</strong>.</p>
+            <div class="route-card-pool" id="routeCardPool">
+              <button draggable="true" data-route-card="transformer">Dynamic relevance routing</button>
+              <button draggable="true" data-route-card="bdh">Local graph interaction</button>
+              <button draggable="true" data-route-card="hrm">Slow/fast recurrent hierarchy</button>
+              <button draggable="true" data-route-card="none">Permanent weight update during every inference</button>
+            </div>
+            <div class="route-drop-grid">
+              <div class="route-drop" data-route-drop="transformer"><small>TRANSFORMER</small></div>
+              <div class="route-drop" data-route-drop="bdh"><small>BDH</small></div>
+              <div class="route-drop" data-route-drop="hrm"><small>HRM</small></div>
+              <div class="route-drop" data-route-drop="none"><small>NONE</small></div>
+            </div>
+            <div class="feedback" id="routeDropFeedback"></div>
+          </div>
+          <div class="module-takeaway hidden" id="replayTakeaway"><strong>Same task. Same answer. Different route through the machine.</strong><span>But these routes don't all unfold in the same way over computational depth and time.</span></div>
+        </div>
+      </section>
+
+      <!-- MODULE 11 -->
+      <section class="stage content-heavy" data-stage="11">
+        <p class="kicker">11 / 14</p><h2>How Deep Can the Machine Think?</h2>
+        <div class="stage-explainer depth-copy">
+          <p><strong>How computation unfolds structurally before introducing deliberate test-time compute allocation.</strong></p>
+          <p>Not every architecture obtains computational depth in the same way.</p>
+          <p>A computation can become deeper because information passes through more transformations, because a state is repeatedly updated, or because recurrent modules perform additional cycles.</p>
+          <div class="architecture-three depth-architecture-three">
+            <article><small>TRANSFORMER</small><h4>Depth through stacked transformations</h4><pre class="concept-pre">X₀
+↓
+Block 1
+↓
+X₁
+↓
+Block 2
+↓
+X₂
+...</pre><p>Each block includes attention and feed-forward computation. For a fixed standard architecture, the layer stack provides a fixed amount of depth per forward evaluation.</p></article>
+            <article><small>BDH</small><h4>Computation through evolving state</h4><pre class="concept-pre">state₀ → state₁ → state₂ → ...</pre><p>BDH combines its graph organization with state-space sequence processing, so its computation can be understood partly as an evolving system rather than only as one static graph evaluation.</p></article>
+            <article><small>HRM</small><h4>Depth through hierarchical recurrence</h4><p>The lower-level module performs rapid updates while the high-level module changes more slowly. HRM also includes adaptive computation time across computational segments.</p><blockquote><strong>Variable recurrent computational depth is explicit.</strong></blockquote></article>
+          </div>
+          <div class="important-concept compact-important"><strong>Important boundary</strong><p><strong>Architecture tells us what kinds of computation are possible inside the machine.</strong></p><span>Another question remains: if extra inference compute is available, how should we allocate it? Save that for <strong>How Is Compute Spent?</strong></span></div>
+        </div>
+
+        <div class="interactive-lab depth-elevator-lab" id="depthElevatorLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Depth Elevator</h3><p>Move one level deeper and watch what “depth” means for each architecture.</p></div>
+          <div class="depth-shafts">
+            <article data-depth-machine="transformer"><small>TRANSFORMER</small><div class="depth-window" id="transformerDepth">DEPTH 0</div><p>STACK</p></article>
+            <article data-depth-machine="bdh"><small>BDH</small><div class="depth-window" id="bdhDepth">STATE 0</div><p>EVOLVE</p></article>
+            <article data-depth-machine="hrm"><small>HRM</small><div class="depth-window hrm-depth-window" id="hrmDepth"><b>H₀</b><span>L₀</span></div><p>RECUR AT TWO TIMESCALES</p></article>
+          </div>
+          <button class="primary depth-lever" id="goDeeper">GO DEEPER</button>
+          <div class="feedback" id="depthFeedback">Depth 0 — all three machines are at their starting state.</div>
+          <div class="halt-panel hidden" id="haltPanel"><small>HRM SEGMENT BOUNDARY</small><div><button class="ghost" id="haltChoice">HALT</button><button class="primary" id="continueChoice">CONTINUE</button></div><p>HRM includes an adaptive halting mechanism for deciding whether additional segments are useful.</p></div>
+          <div class="depth-summary hidden" id="depthSummary"><div><small>TRANSFORMER</small><strong>STACK</strong></div><div><small>BDH</small><strong>EVOLVE</strong></div><div><small>HRM</small><strong>RECUR AT TWO TIMESCALES</strong></div></div>
+          <div class="module-takeaway hidden" id="depthTakeaway"><strong>You understand how the machines compute. Next, prove you can rebuild them.</strong></div>
+        </div>
+      </section>
+
+      <!-- MODULE 12 -->
+      <section class="stage content-heavy" data-stage="12">
+        <p class="kicker">12 / 14</p><h2>Reconstruct the Machine</h2>
+        <div class="stage-explainer reconstruct-copy">
+          <p><strong>Generative understanding.</strong></p>
+          <h3>Recognition is easier than reconstruction.</h3>
+          <p>Seeing “H module + L module” and choosing HRM is one thing. Starting with an empty machine and deciding what is <strong>essential</strong> is much harder.</p>
+          <blockquote class="lesson-quote"><strong>Reconstruct each architecture using only the components that define its computational organization.</strong></blockquote>
+          <p>You will also see mechanisms that belong elsewhere: <strong>tree search, majority vote, weight update, prompt modification.</strong> Those can be useful at test time—but they are not defining components of these three architectures.</p>
+        </div>
+
+        <div class="interactive-lab reconstruction-lab" id="reconstructionLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Black Box Reconstruction</h3><p>Observe an unlabeled machine, then rebuild the smallest explanation that fits the evidence.</p></div>
+          <div class="observation-window" id="observationWindow"><small>PHASE 1 — OBSERVE</small><strong id="observationTitle">Dynamic long-range relevance links appear.</strong><div id="observationVisual" class="observation-visual transformer-observation"><i></i><i></i><i></i></div><button class="primary" id="beginRebuild">REBUILD FROM MEMORY</button></div>
+          <div class="rebuild-phase hidden" id="rebuildPhase">
+            <div class="rebuild-head"><small id="rebuildIndex">RECONSTRUCTION A / 3</small><strong id="rebuildPrompt">Use the smallest set of components needed to explain what you observed.</strong></div>
+            <div class="component-pool" id="componentPool">
+              <button draggable="true" data-component="Attention">Attention</button><button draggable="true" data-component="Feed-forward transformation">Feed-forward transformation</button><button draggable="true" data-component="Local nodes">Local nodes</button><button draggable="true" data-component="Synaptic connections/state">Synaptic connections/state</button><button draggable="true" data-component="H Module">H Module</button><button draggable="true" data-component="L Module">L Module</button><button draggable="true" data-component="Recurrence">Recurrence</button><button draggable="true" data-component="Tree search">Tree search</button><button draggable="true" data-component="Majority vote">Majority vote</button><button draggable="true" data-component="Gradient update">Gradient update</button><button draggable="true" data-component="Prompt optimizer">Prompt optimizer</button>
+            </div>
+            <div class="rebuild-canvas" id="rebuildCanvas"><small>EMPTY MACHINE — DROP ESSENTIAL COMPONENTS HERE</small><div id="placedComponents"></div></div>
+            <div class="rebuild-actions"><button class="ghost" id="clearRebuild">CLEAR</button><button class="primary" id="checkRebuild">CHECK MACHINE</button></div>
+            <div class="feedback" id="rebuildFeedback"></div>
+          </div>
+          <div class="module-takeaway hidden" id="reconstructTakeaway"><strong>Architecture describes the reasoning machine—not every strategy that can be placed around it.</strong><span>The labels disappear now. Identify the machine from evidence alone.</span></div>
+        </div>
+      </section>
+
+      <!-- MODULE 13 -->
+      <section class="stage content-heavy final-check" data-stage="13">
+        <p class="kicker">13 / 14</p><h2>Final Check: Identify the Machine</h2>
+        <div class="stage-explainer identify-copy">
+          <h3>IDENTIFY THE MACHINE</h3>
+          <p>Three architectures. No labels. Look for structural evidence.</p>
+          <div class="architecture-three evidence-guide">
+            <article><small>TRANSFORMER</small><p><strong>attention-based communication</strong><br>stacked transformations<br>dynamic relevance between representations</p></article>
+            <article><small>BDH</small><p><strong>locally interacting nodes</strong><br>graph structure<br>dynamic synaptic working state</p></article>
+            <article><small>HRM</small><p><strong>two recurrent levels</strong><br>slow high-level computation<br>fast low-level computation<br>hierarchical recurrence</p></article>
+          </div>
+          <blockquote class="lesson-quote"><strong>Do not identify a machine from one buzzword. Use several pieces of evidence together.</strong></blockquote>
+        </div>
+
+        <div class="interactive-lab black-box-lab" id="blackBoxLab">
+          <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Black Box Lab</h3><p>Run three experiments before you are allowed to classify α, β, and γ.</p></div>
+          <div class="black-box-machines">
+            <article data-blackbox="alpha"><small>MACHINE α</small><div class="blackbox-visual alpha-visual"><i></i><i></i><i></i><i></i></div><p class="blackbox-readout">No evidence yet.</p></article>
+            <article data-blackbox="beta"><small>MACHINE β</small><div class="blackbox-visual beta-visual"><i></i><i></i><i></i><i></i><i></i></div><p class="blackbox-readout">No evidence yet.</p></article>
+            <article data-blackbox="gamma"><small>MACHINE γ</small><div class="blackbox-visual gamma-visual"><b>H</b><span><i>L</i><i>L</i><i>L</i></span></div><p class="blackbox-readout">No evidence yet.</p></article>
+          </div>
+          <div class="experiment-controls"><button class="ghost" data-experiment="input">INJECT INPUT</button><button class="ghost" data-experiment="state" disabled>REVEAL TEMPORARY STATE</button><button class="ghost" data-experiment="step" disabled>STEP COMPUTATION</button></div>
+          <div class="classification-phase hidden" id="classificationPhase">
+            <p>Drag one architecture label onto each machine.</p>
+            <div class="architecture-labels" id="architectureLabels"><button draggable="true" data-arch-label="Transformer">TRANSFORMER</button><button draggable="true" data-arch-label="BDH">BDH</button><button draggable="true" data-arch-label="HRM">HRM</button></div>
+            <div class="classification-drops"><div data-classify-drop="alpha"><small>α</small></div><div data-classify-drop="beta"><small>β</small></div><div data-classify-drop="gamma"><small>γ</small></div></div>
+            <div class="feedback" id="classificationFeedback"></div>
+          </div>
+          <div class="evidence-phase hidden" id="evidencePhase"><h4>Evidence requirement</h4><p>For each machine, select <strong>two reasons</strong>. Guessing is not accepted.</p><div id="evidenceCases"></div><button class="primary" id="checkEvidence">CHECK EVIDENCE</button><div class="feedback" id="evidenceFeedback"></div></div>
+          <div class="impostor-phase hidden" id="impostorPhase"><small>FINAL CHALLENGE — THE IMPOSTOR CLUE</small><h4>MACHINE γ</h4><div class="impostor-clues"><button>High-level recurrent state</button><button>Low-level recurrent state</button><button>Fast/slow computation</button><button data-impostor>Explores 32 independent solution samples and majority-votes them</button></div><p>Which clue describes an <strong>external inference strategy</strong> rather than the architecture itself?</p><div class="feedback" id="impostorFeedback"></div></div>
+          <div class="chapter-reveal hidden" id="chapterReveal"><small>FINAL CHAPTER REVEAL</small><h3>WHAT DOES THE THINKING?</h3><div class="final-machine-map"><article><small>TRANSFORMER</small><strong>ATTEND</strong><p>attention + feed-forward computation</p></article><article><small>BDH</small><strong>INTERACT</strong><p>local graph + dynamic synaptic state</p></article><article><small>HRM</small><strong>COORDINATE</strong><p>H / L recurrent computation at different timescales</p></article></div><blockquote><strong>You now know what the reasoning machine is.</strong></blockquote><div class="compute-budget"><label>COMPUTE BUDGET</label><input type="range" min="1" max="32" value="1" id="computeBudget"><output id="computeBudgetOutput">1×</output></div><p><strong>But what should the system do with more computation before answering?</strong></p><a class="compute-next" href="#">→ HOW IS COMPUTE SPENT?</a></div>
+        </div>
+      </section>
+
+      <!-- MODULE 14 -->
+      <section class="stage" data-stage="14">
+        <p class="kicker">14 / 14</p><h2>The One-Screen Mental Model</h2>
+        <div class="final-system"><div class="flow-stack"><b>DEMONSTRATIONS D₁ … Dₖ</b><i>↓</i><b>CONTEXTUAL MEMORY S₀ → Sₖ</b><i>↓</i><b>QUERY x★</b><i>↓</i><b>LATENT WORKSPACE H₀ → Hᴿ</b><i>↓</i><b>DECODE + RANK</b><i>↓</i><b>FINAL PREDICTION</b></div><div class="theta-lock">θ<span>FIXED DURING TEST TIME</span></div></div>
+      </section>
+    </div>
+
+    <nav class="lesson-nav" aria-label="Lesson navigation">
+      <button id="prevStep" class="ghost">← Previous</button>
+      <span id="navLabel" class="nav-label">PARAMETERS / TEMPORARY STATE</span>
+      <button id="nextStep" class="ghost">Next →</button>
+    </nav>
+  </main>
+  <script src="bdh.js"></script>
+</body>
+</html>

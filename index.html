@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Exploring how additional computation at inference changes the way models reason.">
+  <title>Test-Time Architectures</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="inference-story.css">
+</head>
+<body>
+  <div class="scroll-story">
+    <main class="hero" aria-labelledby="title">
+      <div class="scene" aria-hidden="true">
+        <canvas class="web-canvas"></canvas>
+        <div class="shade"></div>
+      </div>
+
+      <div class="corner tl" aria-hidden="true"></div>
+      <div class="corner tr" aria-hidden="true"></div>
+      <div class="corner bl" aria-hidden="true"></div>
+      <div class="corner br" aria-hidden="true"></div>
+
+
+      <p class="side left" tabindex="0">Reasoning<br>Beyond One Pass</p>
+      <div class="title-group">
+        <h1 id="title"><span>TEST TIME</span><span>ARCHITECTURES</span></h1>
+        <p class="subtitle">Different ways systems organize computation, reasoning, and adaptation during inference.</p>
+      </div>
+      <p class="side right" tabindex="0">Tokens • Search •<br>Latent Computation</p>
+
+      <footer>
+        <span class="foot-line" aria-hidden="true"></span>
+        <p>Exploring how additional computation at inference<br class="desktop"> changes the way models reason.</p>
+      </footer>
+
+      <button class="motion" type="button" aria-label="Pause animation" aria-pressed="false">
+        <span aria-hidden="true">Ⅱ</span><span class="motion-label">Pause motion</span>
+      </button>
+
+      <canvas class="artifact-canvas" aria-hidden="true"></canvas>
+      <div class="artifact-fallback" aria-hidden="true">✦</div>
+      <section class="chapter" aria-label="Explore inference" inert>
+        <p class="chapter-category"><em>Architecture</em></p>
+        <a class="artifact-link" href="bdh-cq/index.html" aria-label="Explore Architecture: BDH-CQ"></a>
+        <div class="chapter-callout">
+          <svg viewBox="0 0 340 100" preserveAspectRatio="none" aria-hidden="true"><path d="M 0 100 L 78 22 H 340" pathLength="1"/></svg>
+          <a class="chapter-link" href="bdh-cq/index.html"><span class="chapter-question">What does the thinking?</span><span class="chapter-hint">Click to explore</span></a>
+        </div>
+      </section>
+      <nav class="story-controls" aria-label="Scroll chapters">
+        <button type="button" data-step="0" aria-label="Introduction" aria-current="step"></button>
+        <button type="button" data-step="1" aria-label="Architecture"></button>
+        <button type="button" data-step="2" aria-label="Inference Strategy"></button>
+        <button type="button" data-step="3" aria-label="Adaptation"></button>
+      </nav>
+      <p class="story-status" aria-live="polite"></p>
+      <a class="bottom-insight" href="cot-vs-test-time/index.html" aria-label="Understand the difference between Test-Time Architecture and Chain-of-Thought architecture">
+        Understand the difference between Test-Time Architecture and Chain-of-Thought architecture
+      </a>
+    </main>
+  </div>
+
+  <script type="importmap">
+    {"imports":{"three":"./vendor/three.module.min.js"}}
+  </script>
+  <script type="module" src="web-background.js"></script>
+  <script src="script.js"></script>
+  <script src="scroll.js"></script>
+  <script type="module" src="inference-artifact.js"></script>
+  <script src="navigation.js"></script>
+</body>
+</html>

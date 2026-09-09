@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Test-time adaptation: what is allowed to move at inference time?">
+  <title>Adaptation — What Can Change?</title>
+  <link rel="stylesheet" href="adaptation.css">
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="../index.html#adaptation" aria-label="Back to Test-Time Architectures">← TEST-TIME ARCHITECTURES</a>
+    <div class="eyebrow">ADAPTATION</div>
+    <h1>WHAT CAN CHANGE?</h1>
+    <p class="lede">A research-guided map of the different surfaces a system can modify when test data arrive.</p>
+  </header>
+
+  <main>
+    <section class="research-row row-wide" aria-labelledby="row-1-title">
+      <div class="copy">
+        <span class="row-number">01 / WHAT TO ADAPT</span>
+        <h2 id="row-1-title">Test-time adaptation does not automatically mean “retrain the model.”</h2>
+        <p>When the deployment environment changes, a system can respond by modifying very different parts of its computation.</p>
+        <p>It could update <strong>model parameters</strong>. It could estimate new <strong>normalization statistics</strong>. It could transform the <strong>incoming sample</strong>. It could adapt a <strong>prompt</strong> while keeping weights frozen. Or another mechanism could directly infer temporary parameters for the current input.</p>
+        <p>So the important question is not:</p>
+        <p class="emphasis-question">“Does adaptation happen?”</p>
+        <blockquote>What is allowed to move?</blockquote>
+        <p>The choice determines the adaptation's flexibility, memory cost, latency, stability, and risk of damaging previously learned behavior. The survey formalizes this as five main “what to adapt” categories.</p>
+        <p class="source-note"><em>Beyond Model Adaptation at Test Time: A Survey</em> — “What to Adapt”</p>
+      </div>
+      <figure class="visual visual-wide">
+        <img src="assets/what-can-change.png" width="1976" height="934" alt="Flow diagram showing test input branching into model weights, generated parameters, normalization statistics, sample or features, and prompt or context before output.">
+        <figcaption>Survey taxonomy — what can change at test time.</figcaption>
+      </figure>
+    </section>
+
+    <div class="section-marker"><span>MODEL ADAPTATION</span></div>
+
+    <section class="research-row reverse" aria-labelledby="row-2-title">
+      <figure class="visual portrait">
+        <img src="assets/model-adaptation.png" width="737" height="1152" alt="Diagram showing a target test sample producing an unsupervised loss and gradient that updates source parameters into target adapted parameters before prediction.">
+        <figcaption>Survey — Figure 3: Model Adaptation.</figcaption>
+      </figure>
+      <div class="copy">
+        <span class="row-number">02 / CHANGE THE MACHINERY</span>
+        <h2 id="row-2-title">The most direct form of adaptation changes the model.</h2>
+        <p>A source-trained model begins with parameters <strong>θ</strong>.</p>
+        <p>When target data arrive, an unsupervised or self-supervised test-time objective produces an update, creating parameters better suited to the current distribution.</p>
+        <div class="equation" aria-label="theta t prime equals theta s minus eta times gradient theta of loss on x t and theta">θ′<sub>t</sub> = θ<sub>s</sub> − η ∇<sub>θ</sub> L(x<sub>t</sub>; θ)</div>
+        <p>Now the machine performing inference is literally different from the one that entered the test phase.</p>
+        <p>This gives adaptation high flexibility—but changing a large parameter space also introduces <strong>optimization cost, memory overhead, instability, and the possibility of drifting away from useful source knowledge</strong>. The survey distinguishes this as model adaptation.</p>
+      </div>
+    </section>
+
+    <div class="section-marker"><span>TEST-TIME TRAINING</span></div>
+
+    <section class="research-row" aria-labelledby="row-3-title">
+      <div class="copy">
+        <span class="row-number">03 / SELF-SUPERVISED SIGNAL</span>
+        <h2 id="row-3-title">Learn from the test input without its label.</h2>
+        <p><em>Test-Time Training with Self-Supervision</em> gives an elegant answer to a hard question: where does the learning signal come from if the answer is unknown?</p>
+        <p>During training, the network learns two tasks that share an encoder: a <strong>main supervised task</strong>, and an <strong>auxiliary self-supervised task</strong>.</p>
+        <p>At test time, the true class label is unavailable—but the auxiliary task can still produce its own training signal from the test input.</p>
+        <p>Before making the main prediction, the shared representation is updated using that auxiliary loss. The label is never revealed. The model instead asks the test sample to provide a <strong>surrogate learning problem</strong> first.</p>
+        <blockquote>Test → learn something from x → then predict y.</blockquote>
+      </div>
+      <figure class="visual portrait">
+        <img src="assets/test-time-training.png" width="578" height="1374" alt="Architecture diagram showing a test image passing through a shared encoder and self-supervised head, producing an auxiliary loss that updates the shared encoder while the main task head stays frozen.">
+        <figcaption>Test-Time Training with Self-Supervision — shared encoder and auxiliary test-time objective.</figcaption>
+      </figure>
+    </section>
+
+    <div class="section-marker"><span>TENT</span></div>
+
+    <section class="research-row reverse" aria-labelledby="row-4-title">
+      <div class="visual-stack" aria-label="Tent diagrams">
+        <figure class="visual compact">
+          <img src="assets/tent-normalization-flow.png" width="492" height="952" alt="Feature normalization diagram using mean and standard deviation followed by scale and shift using gamma and beta.">
+          <figcaption>Feature normalization and affine modulation.</figcaption>
+        </figure>
+        <figure class="visual compact landscape-small">
+          <img src="assets/tent-adaptation-surface.png" width="721" height="595" alt="Diagram showing mean and standard deviation estimated from test data, gamma and beta optimized using entropy, and the rest of theta locked.">
+          <figcaption>Tent exposes only a narrow adaptation surface.</figcaption>
+        </figure>
+      </div>
+      <div class="copy">
+        <span class="row-number">04 / CHANGE LESS</span>
+        <h2 id="row-4-title">Adapt the feature modulation, not the whole network.</h2>
+        <p>Tent takes a deliberately constrained approach.</p>
+        <p>Rather than updating every weight, it minimizes the entropy of test predictions while changing the <strong>normalization statistics and channel-wise affine parameters</strong>. Most of the trained model remains frozen.</p>
+        <p>In Tent:</p>
+        <div class="parameter-pairs">
+          <span><strong>μ and σ</strong> adapt how features are normalized.</span>
+          <span><strong>γ and β</strong> adapt how each channel is scaled and shifted.</span>
+        </div>
+        <p>The learning signal is simply prediction entropy:</p>
+        <div class="equation">H(ŷ) = −Σ<sub>c</sub> p<sub>c</sub> log p<sub>c</sub></div>
+        <p>The system uses its own uncertainty as an unsupervised signal—no target labels and no source data are required in the fully test-time setting.</p>
+        <blockquote>Adaptation is not binary. The system can expose only a tiny surface to change.</blockquote>
+      </div>
+    </section>
+
+    <aside class="graph-inset" aria-label="Tent entropy and distribution-shift reference">
+      <div>
+        <span class="row-number">TENT / SHIFT SIGNAL</span>
+        <h3>Distribution shift can reveal itself through uncertainty.</h3>
+        <p>Tent also motivates entropy as a test-time signal by connecting worsening corruption with increasing uncertainty and loss. This plot is kept as a graph-heavy reference beside the mechanism diagrams rather than replacing them.</p>
+      </div>
+      <figure class="visual graph">
+        <img src="assets/tent-shift-dark.png" width="1400" height="1000" alt="Line graph titled Source to Target Activation Shift showing two activation density curves shifted relative to one another.">
+      </figure>
+    </aside>
+
+    <div class="section-marker"><span>NORMALIZATION ADAPTATION</span></div>
+
+    <section class="research-row" aria-labelledby="row-5-title">
+      <div class="copy">
+        <span class="row-number">05 / MOVE THE REFERENCE STATISTICS</span>
+        <h2 id="row-5-title">A model can stay fixed while its reference statistics move.</h2>
+        <p>Training data may establish one feature distribution. At deployment, the target data may have a different mean or variance.</p>
+        <p>Instead of modifying the learned network, normalization adaptation estimates statistics from the new target distribution and uses them during inference.</p>
+        <div class="concept-block">
+          <div><small>SOURCE</small><strong>μ<sub>source</sub>, σ<sub>source</sub></strong></div>
+          <span>becomes</span>
+          <div><small>TARGET</small><strong>μ<sub>target</sub>, σ<sub>target</sub></strong></div>
+        </div>
+        <div class="locked-line">θ = LOCKED</div>
+        <p>This is a much narrower adaptation surface than full weight optimization.</p>
+        <p>The survey treats normalization adaptation as a separate category because the model parameters can remain fixed while the <strong>statistics governing feature normalization change</strong>.</p>
+        <p class="source-note">Survey — Figure 5 and the normalization-adaptation section.</p>
+      </div>
+      <figure class="visual landscape">
+        <img src="assets/normalization-adaptation.png" width="1702" height="352" alt="Flow diagram comparing source mean and standard deviation with target mean and standard deviation before adapting normalization statistics.">
+        <figcaption>Source statistics are replaced by target statistics while the broader model can remain fixed.</figcaption>
+      </figure>
+    </section>
+
+    <div class="section-marker"><span>LEARNING TO ADAPT</span></div>
+
+    <section class="research-row reverse" aria-labelledby="row-6-title">
+      <figure class="visual portrait">
+        <img src="assets/learning-to-adapt.png" width="568" height="1574" alt="Diagram showing an outer training loop preparing parameters for a test-time inner learning loop that performs multiple updates using self-supervision before prediction.">
+        <figcaption>Outer-loop training prepares a useful inner-loop test-time learner.</figcaption>
+      </figure>
+      <div class="copy">
+        <span class="row-number">06 / LEARN THE UPDATE RULE</span>
+        <h2 id="row-6-title">What if the model learns how it should learn at test time?</h2>
+        <p>Ordinary test-time adaptation defines an update rule and applies it when test data arrive. <em>Learning to (Learn at Test Time)</em> goes a level higher.</p>
+        <p>It frames the system as two nested learning processes.</p>
+        <p>The <strong>inner loop</strong> learns from an individual test instance through self-supervision before making its prediction.</p>
+        <p>The <strong>outer loop</strong>, during training, learns representations and objectives such that those inner-loop updates actually improve the main task.</p>
+        <p>At deployment, only the inner process is required.</p>
+        <p>This changes the design question from:</p>
+        <p class="emphasis-question">“What test-time loss should we bolt onto the model?”</p>
+        <blockquote>Can training prepare the model to become a better test-time learner?</blockquote>
+        <p>This is one of the strongest bridges between <strong>Adaptation</strong> and <strong>Test-Time Architecture</strong>.</p>
+      </div>
+    </section>
+
+    <div class="section-marker"><span>PARAMETER INFERENCE</span></div>
+
+    <section class="research-row" aria-labelledby="row-7-title">
+      <div class="copy">
+        <span class="row-number">07 / GENERATED PARAMETERS</span>
+        <h2 id="row-7-title">Adapt without running gradient descent.</h2>
+        <p>Instead of taking several gradient steps on the model, an auxiliary mechanism can examine the current test input and directly generate the parameters needed for that input.</p>
+        <div class="equation">θ′<sub>t</sub> = φ(x<sub>t</sub>, θ<sub>s</sub>)</div>
+        <p>followed by:</p>
+        <div class="equation">y<sub>t</sub> = f<sub>θ′t</sub>(x<sub>t</sub>)</div>
+        <p>The adaptation therefore occurs in a <strong>single forward computation</strong> rather than through ordinary back-propagation.</p>
+        <p>This can be more efficient at deployment, although the parameter-generation mechanism generally has to be prepared during training and may generate only a subset of the model's parameters.</p>
+      </div>
+      <figure class="visual portrait-medium">
+        <img src="assets/parameter-inference.png" width="889" height="1152" alt="Diagram showing a test sample entering a parameter generator that combines source parameters with generated adaptation parameters to produce input-specific adapted parameters before model inference.">
+        <figcaption>Input-conditioned parameter generation.</figcaption>
+      </figure>
+    </section>
+
+    <div class="section-marker"><span>SAMPLE ADAPTATION</span></div>
+
+    <section class="research-row reverse" aria-labelledby="row-8-title">
+      <figure class="visual landscape">
+        <img src="assets/sample-adaptation.png" width="1954" height="312" alt="Diagram showing a target sample transformed by an adapter into a source-like sample before entering a frozen model and producing output.">
+        <figcaption>Move the target sample toward the source world while the source model stays frozen.</figcaption>
+      </figure>
+      <div class="copy">
+        <span class="row-number">08 / MOVE THE DATA</span>
+        <h2 id="row-8-title">Sometimes the machine should not move at all.</h2>
+        <p>If the model performs well on its original source distribution, another option is to transform the <strong>incoming test sample toward the representation the model already understands</strong>.</p>
+        <p>Instead of:</p>
+        <div class="equation">change f<sub>θ</sub></div>
+        <p>the system learns or applies:</p>
+        <div class="equation">x′<sub>t</sub> = ψ(x<sub>t</sub>)</div>
+        <p>and then uses the frozen source model:</p>
+        <div class="equation">y = f<sub>θ</sub>(x′<sub>t</sub>)</div>
+        <p>The burden of adaptation moves from the model to the input.</p>
+        <p>The survey calls this <strong>sample adaptation</strong>, and notes that generative models are often used to transform target samples toward source-like data.</p>
+        <p class="source-note">Survey — Figure 6.</p>
+      </div>
+    </section>
+
+    <div class="section-marker"><span>PROMPT ADAPTATION</span></div>
+
+    <section class="research-row" aria-labelledby="row-9-title">
+      <div class="copy">
+        <span class="row-number">09 / MOVE THE CONTEXT</span>
+        <h2 id="row-9-title">For foundation models, the adaptable object can be context itself.</h2>
+        <p>A pretrained model can remain completely frozen while a small set of prompt tokens, embeddings, or textual instructions is modified for the target data.</p>
+        <p>The learned knowledge stays inside <strong>θ</strong>. What changes is the information placed <strong>around the input</strong>.</p>
+        <p>This gives prompt adaptation an attractive deployment property: the adaptation surface can be dramatically smaller than the model itself, while the underlying pretrained parameters remain intact.</p>
+        <p>The test-time-adaptation survey treats prompt adaptation as its own category and discusses both continuous embedding-space and textual prompt forms.</p>
+      </div>
+      <figure class="visual prompt-figure">
+        <div class="prompt-diagram" role="img" aria-label="Static diagram showing target data adapting prompt or context which is then passed through frozen model parameters to output.">
+          <div class="prompt-node">TARGET DATA</div>
+          <div class="prompt-arrow">→</div>
+          <div class="prompt-node accent">ADAPT<br>PROMPT / CONTEXT</div>
+          <div class="prompt-arrow">→</div>
+          <div class="prompt-node locked">FROZEN θ</div>
+          <div class="prompt-arrow">→</div>
+          <div class="prompt-node">OUTPUT</div>
+        </div>
+        <figcaption>Prompt adaptation changes the surrounding context rather than the pretrained weights.</figcaption>
+      </figure>
+    </section>
+
+    <div class="section-marker"><span>TRM / ADAPTATION BANDWIDTH</span></div>
+
+    <section class="research-row reverse trm-row" aria-labelledby="row-10-title">
+      <figure class="visual tiny-graph">
+        <img src="assets/trm-bandwidth-dark.png" width="311" height="190" alt="Small line chart comparing full fine-tuning, embeddings-only, embedding plus LoRA variants, and LoRA as training steps increase on ARC evaluation pass at 2.">
+        <figcaption>TRM/ARC setting — adaptation methods behave differently as the trainable surface changes.</figcaption>
+      </figure>
+      <div class="copy">
+        <span class="row-number">10 / HOW MUCH MAY MOVE?</span>
+        <h2 id="row-10-title">Adaptation has bandwidth.</h2>
+        <p>Even after deciding to adapt model parameters, another question remains:</p>
+        <blockquote>How much of the model is allowed to move?</blockquote>
+        <p>At one extreme, adaptation may modify only a small embedding or low-dimensional subspace. At the other, every trainable parameter may update.</p>
+        <p><em>Test-time Adaptation of Tiny Recursive Models</em> investigates this tradeoff directly. In its particular TRM/ARC setting, the authors report that <strong>full fine-tuning was necessary for their strongest adaptation result</strong>, while parameter-efficient alternatives such as embeddings-only and LoRA variants behaved differently.</p>
+        <p>This is not evidence that full fine-tuning is universally better. It demonstrates the more important architectural point:</p>
+        <blockquote>The size of the adaptation surface is itself a test-time design choice.</blockquote>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <p class="eyebrow">THE DISTINCTION</p>
+      <h2 id="closing-title">ADAPTATION IS A CHOICE OF WHAT IS ALLOWED TO MOVE.</h2>
+      <div class="closing-grid">
+        <article>
+          <span>INFERENCE STRATEGY</span>
+          <p>Where should the system spend more computation?</p>
+        </article>
+        <article>
+          <span>ADAPTATION</span>
+          <p>Which part of the system may change in response to test data?</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

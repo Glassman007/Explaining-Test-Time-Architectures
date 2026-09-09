@@ -1,0 +1,56 @@
+'use strict';
+const C={0:'c0',1:'c1',2:'c2',3:'c3',4:'c4',5:'c5'};
+const puzzles=[
+ [
+  {input:[1,0,0,0,1,2,0,0,0,2,0,0,0,0,0,0],correct:'Rotate 90°',rules:['Rotate 90°','Flip horizontal','Shift right','Recolor blue → gold']},
+  {input:[0,0,3,3,0,0,3,0,4,0,0,0,4,4,0,0],correct:'Flip horizontal',rules:['Flip vertical','Flip horizontal','Rotate 90°','Shift right']}
+ ],
+ [
+  {input:[1,1,0,0,0,2,0,0,0,2,0,0,0,0,0,0],correct:'Shift right',rules:['Rotate 90°','Flip horizontal','Shift right','Recolor blue → gold']},
+  {input:[5,0,0,0,5,5,0,0,0,0,4,0,0,0,4,4],correct:'Rotate 90°',rules:['Rotate 90°','Flip vertical','Shift right','Recolor blue → gold']}
+ ],
+ [
+  {input:[1,0,2,0,0,1,0,0,0,0,2,0,0,0,0,0]},
+  {input:[3,3,0,0,0,3,0,4,0,0,4,4,0,0,0,0]}
+ ]
+];
+const modeNames=[['MODE 1','Serial Room'],['MODE 2','Superposition Chamber'],['MODE 3','Augmentation Hall']];
+let mode=0,puzzleIndex=0,turns=0,activeAtLock=0,canNext=false;
+const workspace=document.querySelector('#workspace'),counter=document.querySelector('#counter'),nextBtn=document.querySelector('#nextPuzzle');
+const eq=(a,b)=>a.every((v,i)=>v===b[i]);
+function rotate(a){const o=Array(16);for(let r=0;r<4;r++)for(let c=0;c<4;c++)o[c*4+(3-r)]=a[r*4+c];return o}
+function flipH(a){const o=[];for(let r=0;r<4;r++)o.push(...a.slice(r*4,r*4+4).reverse());return o}
+function flipV(a){return [...a.slice(12,16),...a.slice(8,12),...a.slice(4,8),...a.slice(0,4)]}
+function shiftRight(a){const o=[];for(let r=0;r<4;r++){const row=a.slice(r*4,r*4+4);o.push(0,row[0],row[1],row[2])}return o}
+function recolor(a){return a.map(v=>v===1?2:v)}
+function apply(rule,a){return rule==='Rotate 90°'?rotate(a):rule==='Flip horizontal'?flipH(a):rule==='Flip vertical'?flipV(a):rule==='Shift right'?shiftRight(a):recolor(a)}
+function grid(data,extra=''){const el=document.createElement('div');el.className='grid '+extra;data.forEach(v=>{const c=document.createElement('i');c.className='cell '+C[v];el.append(c)});return el}
+function targetFor(p){return apply(p.correct,p.input)}
+function setNext(v,label='Next puzzle →'){canNext=v;nextBtn.disabled=!v;nextBtn.textContent=label}
+function header(){document.querySelector('#modeEyebrow').textContent=modeNames[mode][0];document.querySelector('#modeTitle').textContent=modeNames[mode][1];document.querySelector('#progress').textContent=`MODE ${mode+1} · PUZZLE ${puzzleIndex+1}/2`;document.querySelectorAll('.mode-rail i').forEach((el,i)=>el.classList.toggle('active',i===mode));}
+function render(){header();setNext(false);workspace.replaceChildren();if(mode===0)renderSerial();if(mode===1)renderSuperposition();if(mode===2)renderAugmentation()}
+function renderSerial(){const p=puzzles[0][puzzleIndex],room=document.createElement('div');room.className='room';
+ const inputPanel=document.createElement('div');inputPanel.className='panel';inputPanel.innerHTML='<p class="panel-title">Input</p><div class="grid-wrap"></div>';inputPanel.querySelector('.grid-wrap').append(grid(p.input));
+ const middle=document.createElement('div');middle.className='panel';middle.innerHTML='<p class="panel-title">Choose one hypothesis</p><div class="rule-list"></div><div class="result-state">No hypothesis applied</div>';const list=middle.querySelector('.rule-list'),state=middle.querySelector('.result-state');
+ const resultPanel=document.createElement('div');resultPanel.className='panel';resultPanel.innerHTML='<p class="panel-title">Target / Result</p><div class="comparison"><div class="target"></div><span class="arrow">→</span><div class="result"></div></div>';resultPanel.querySelector('.target').append(grid(targetFor(p)));resultPanel.querySelector('.result').append(grid(Array(16).fill(0)));
+ p.rules.forEach(rule=>{const b=document.createElement('button');b.className='rule';b.textContent=rule;b.onclick=()=>{turns++;counter.textContent=`TURN ${turns}`;const out=apply(rule,p.input);resultPanel.querySelector('.result').replaceChildren(grid(out));const match=eq(out,targetFor(p));state.textContent=match?'VISUAL MATCH':'DISCARD · PICK AGAIN';state.className='result-state '+(match?'match':'miss');setNext(true);};list.append(b)});
+ room.append(inputPanel,middle,resultPanel);workspace.append(room);counter.textContent=`TURN ${turns}`;
+}
+function renderSuperposition(){const p=puzzles[1][puzzleIndex],room=document.createElement('div');room.className='room';
+ const input=document.createElement('div');input.className='panel';input.innerHTML='<p class="panel-title">Input + target</p><div class="comparison"><div class="in"></div><span class="arrow">→</span><div class="tar"></div></div>';input.querySelector('.in').append(grid(p.input));input.querySelector('.tar').append(grid(targetFor(p)));
+ const stagePanel=document.createElement('div');stagePanel.className='panel';stagePanel.innerHTML='<p class="panel-title">Live hypothesis blend</p><div class="overlay-stage"></div><div class="lock-note">Move multiple weights, then lock.</div>';const stage=stagePanel.querySelector('.overlay-stage');stage.append(grid(p.input,'base'));
+ const controls=document.createElement('div');controls.className='panel';controls.innerHTML='<p class="panel-title">Hypothesis weights</p><div class="slider-list"></div><button class="lock" type="button">Lock final answer</button>';const list=controls.querySelector('.slider-list');
+ const layers=[];p.rules.forEach((rule,i)=>{const layer=grid(apply(rule,p.input),'overlay-grid');layer.style.opacity=i===0?'.35':'0';layer.style.transform=`translate(${i-1.5}px,${1.5-i}px)`;stage.append(layer);layers.push(layer);const wrap=document.createElement('label');wrap.className='hypothesis';wrap.innerHTML=`<span class="hypothesis-head"><span>${rule}</span><output>${i===0?35:0}%</output></span><input type="range" min="0" max="100" value="${i===0?35:0}">`;const range=wrap.querySelector('input'),out=wrap.querySelector('output');range.oninput=()=>{out.value=range.value+'%';layer.style.opacity=(+range.value/100*.7).toFixed(2);layer.style.transform=`translate(${(+range.value-50)*.025}px,${(50-+range.value)*.018}px)`};list.append(wrap)});
+ controls.querySelector('.lock').onclick=()=>{const vals=[...controls.querySelectorAll('input')].map(x=>+x.value),active=vals.filter(v=>v>0).length,dominant=vals.indexOf(Math.max(...vals));activeAtLock=active;counter.textContent=`ACTIVE AT LOCK ${active}`;const match=p.rules[dominant]===p.correct;stagePanel.querySelector('.lock-note').textContent=match?`VISUAL MATCH · ${active} hypotheses active`:`NO MATCH · ${active} hypotheses active`;stagePanel.querySelector('.lock-note').className='lock-note '+(match?'match':'miss');setNext(true)};
+ room.append(input,stagePanel,controls);workspace.append(room);counter.textContent=`ACTIVE AT LOCK ${activeAtLock}`;
+}
+function renderAugmentation(){const p=puzzles[2][puzzleIndex],room=document.createElement('div');room.className='room augment-room';
+ const control=document.createElement('div');control.className='panel sample-control';control.innerHTML='<p class="panel-title">Copies to sample</p><div class="sample-count">8</div><input type="range" min="4" max="20" value="8"><button class="run-vote" type="button">Run sampling + vote</button>';
+ const copies=document.createElement('div');copies.className='panel';copies.innerHTML='<p class="panel-title">Transformed copies</p><div class="thumbs"></div>';const thumbs=copies.querySelector('.thumbs');
+ const vote=document.createElement('div');vote.className='panel vote-panel';vote.innerHTML='<p class="panel-title">Reverse-transform majority</p><div class="vote-row"><b>A</b><span class="vote-bar"><i></i></span><strong>0</strong></div><div class="vote-row"><b>B</b><span class="vote-bar"><i></i></span><strong>0</strong></div><div class="vote-row"><b>C</b><span class="vote-bar"><i></i></span><strong>0</strong></div><div class="lock-note">Sample copies to form a vote.</div>';
+ const slider=control.querySelector('input'),countEl=control.querySelector('.sample-count');const transforms=[rotate,flipH,flipV,shiftRight];
+ function drawCopies(n,run=false){thumbs.replaceChildren();const tallies={A:0,B:0,C:0};for(let i=0;i<n;i++){const t=document.createElement('div');t.className='thumb';const transformed=transforms[i%transforms.length](p.input);t.append(grid(transformed));if(run){const answer=['A','A','B','C','A','B'][(i+puzzleIndex)%6];tallies[answer]++;const badge=document.createElement('span');badge.className='vote-badge';badge.textContent='↩ '+answer;t.append(badge)}thumbs.append(t)}if(run){const max=Math.max(...Object.values(tallies),1);[...vote.querySelectorAll('.vote-row')].forEach((row,i)=>{const key=['A','B','C'][i],v=tallies[key];row.querySelector('i').style.width=(v/max*100)+'%';row.querySelector('strong').textContent=v});const winner=Object.entries(tallies).sort((a,b)=>b[1]-a[1])[0][0];vote.querySelector('.lock-note').textContent=`MAJORITY → ${winner}`;counter.textContent=`SAMPLES ${n}`;setNext(true)}}
+ slider.oninput=()=>{countEl.textContent=slider.value;drawCopies(+slider.value,false);setNext(false)};control.querySelector('.run-vote').onclick=()=>drawCopies(+slider.value,true);drawCopies(8,false);room.append(control,copies,vote);workspace.append(room);counter.textContent='SAMPLES 0';
+}
+nextBtn.addEventListener('click',()=>{if(!canNext)return;if(puzzleIndex===0){puzzleIndex=1}else if(mode<2){mode++;puzzleIndex=0;turns=0;activeAtLock=0}else{mode=0;puzzleIndex=0;turns=0;activeAtLock=0}render()});
+render();
