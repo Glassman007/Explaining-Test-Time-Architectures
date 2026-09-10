@@ -19,11 +19,7 @@ This document records the code, data, model weights, graphics, fonts, 3D assets,
 
 | File | Bundled Terms | Status in Submission |
 |---|---|---|
-| `assets/fonts/Montelgo-Regular.otf` | `Montelgo-Readme.txt` states personal-use / non-profit terms and restricts commercial use without purchase. | Included with its accompanying terms. |
 | `assets/fonts/CaskoLuxuryDemo-Regular.otf` | `Font-Readme.pdf` states personal-use terms and restricts commercial use without a purchased license. | Included with its accompanying terms. |
-| `assets/fonts/Street-Robot-Inline.ttf` | `Street-Robot-License.txt` contains mixed wording referring to attribution/share-alike as well as noncommercial/commercial-license conditions. | Included with the supplied license text; no broader permission is claimed by this submission. |
-
-The submission does not claim redistribution rights beyond the terms supplied with each font.
 
 ## 3D Assets
 
@@ -31,8 +27,7 @@ The submission does not claim redistribution rights beyond the terms supplied wi
 |---|---|---|
 | `assets/interconnected-web.glb` | Generator metadata: `Dataforge interconnected web`; reproducible with `tools/build_web.py`. | Project-generated, AI-assisted asset. |
 | `assets/interconnected-star.glb` | Generator metadata: `Dataforge freely suspended particles and faint hex cage`. | Project-generated, AI-assisted asset. |
-| `assets/neural-pathways.glb` | GLB generator metadata references `trimesh`; this identifies tooling but does not establish original source ownership. | Original source and license are not established by the repository metadata. |
-| `assets/drop-of-water.glb` | GLB generator metadata references `Sketchfab-12.67.0`. | The repository metadata does not identify the exact Sketchfab model page, creator, or license. |
+
 
 ## Raster Graphics and Photos
 
