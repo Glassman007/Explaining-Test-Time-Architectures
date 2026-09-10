@@ -63,9 +63,10 @@
 
   function renderNode(node,isNew=false){
     let el=$(`[data-node-id="${node.id}"]`,nodeLayer);
-    if(!el){el=document.createElement('article');el.className='thought-node';el.dataset.nodeId=node.id;nodeLayer.append(el);wireDrag(el);}
+    if(!el){el=document.createElement('article');el.className='thought-node';el.dataset.nodeId=node.id;el.tabIndex=0;el.setAttribute('role','button');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectNode(node.id,e.shiftKey||mode==='merge');}});nodeLayer.append(el);wireDrag(el);}
     el.className=`thought-node ${node.type}${selectedId===node.id?' selected':''}${multiSelected.has(node.id)&&selectedId!==node.id?' multi-selected':''}`;
     el.style.left=`${node.x}px`; el.style.top=`${node.y}px`;
+    el.setAttribute('aria-label',`${label(node)}: ${node.text}`);el.setAttribute('aria-pressed',String(multiSelected.has(node.id)));
     const score=node.score?`<div class="node-score"><span>R ${node.score.relevance}</span><span>N ${node.score.novelty}</span><span>C ${node.score.coherence}</span></div>`:'';
     const feedback=node.feedbackCount?`<span class="feedback-count">↻ ${node.feedbackCount}/2</span>`:'';
     el.innerHTML=`<div class="node-top"><span class="node-type">${node.type.toUpperCase()}</span><span class="node-id">${node.id.toUpperCase()}</span>${feedback}</div><div class="node-text">${escapeHtml(node.text)}</div>${score}${isNew?'<span class="node-pulse"></span>':''}`;
@@ -78,7 +79,8 @@
     const width=graphStage.scrollWidth,height=graphStage.scrollHeight;edgeLayer.setAttribute('viewBox',`0 0 ${width} ${height}`);
     edges.forEach(edge=>{
       const a=nodes.get(edge.from), b=nodes.get(edge.to); if(!a||!b)return;
-      const ax=a.x+214, ay=a.y+46, bx=b.x, by=b.y+46;
+      const aEl=nodeLayer.querySelector(`[data-node-id="${a.id}"]`),bEl=nodeLayer.querySelector(`[data-node-id="${b.id}"]`);
+      const ax=a.x+aEl.offsetWidth, ay=a.y+aEl.offsetHeight/2, bx=b.x, by=b.y+bEl.offsetHeight/2;
       const bend=Math.max(70,Math.abs(bx-ax)*.45);
       const d=`M ${ax} ${ay} C ${ax+bend} ${ay}, ${bx-bend} ${by}, ${bx} ${by}`;
       const path=document.createElementNS('http://www.w3.org/2000/svg','path');
@@ -120,6 +122,7 @@
   function closeComposer(){composer.hidden=true;composer.classList.remove('graph-pick');composerAction=null;if(mode!=='reuse'&&mode!=='merge')setMode(null);}
 
   function beginBranch(){
+    setMode(null);
     if(!cost(1))return toast('Not enough chips.'); const node=nodes.get(selectedId);
     openComposer({action:'branch',eyebrow:'BRANCH · 1 CHIP',title:'Explore new directions',copy:`Create 1–3 child ideas from ${label(node)}.`,confirm:'CREATE BRANCHES',body:`<input class="branch-input" placeholder="Child idea 1"><input class="branch-input" placeholder="Child idea 2 (optional)"><input class="branch-input" placeholder="Child idea 3 (optional)">`});
   }
@@ -146,6 +149,7 @@
   }
 
   function beginFeedback(){
+    setMode(null);
     if(!cost(1))return toast('Not enough chips.');const node=nodes.get(selectedId);
     if(!node.score)return toast('Score this node before requesting feedback.');
     if(node.feedbackCount>=2)return toast('This node already has 2 feedback loops.');
@@ -162,14 +166,17 @@
 
   function confirmComposer(){
     const source=nodes.get(selectedId);
+    const required={branch:1,merge:2,feedback:1}[composerAction];
+    if(required===undefined)return;
+    if(!cost(required))return toast('Not enough chips.');
     if(composerAction==='branch'){
       const ideas=$$('.branch-input').map(i=>i.value.trim()).filter(Boolean).slice(0,3); if(!ideas.length)return toast('Enter at least one child idea.');
-      spend(1); ideas.forEach((text,i)=>{const pos=nextChildPosition(source,i,ideas.length);const lineages=source.type==='root'?new Set([`branch-${nodeSeq+i+1}`]):new Set(source.lineages);createNode({text,type:'branch',parents:[source.id],...pos,lineages});});
+      spend(1); ideas.forEach((text,i)=>{const pos=nextChildPosition(source,i,ideas.length);const lineages=source.type==='root'?new Set([`branch-${nodeSeq+1}`]):new Set(source.lineages);createNode({text,type:'branch',parents:[source.id],...pos,lineages});});
       log('BRANCH',`${ideas.length} idea${ideas.length>1?'s':''} explored from ${label(source)}.`);closeComposer();
     } else if(composerAction==='merge'){
       const text=$('#mergeText').value.trim(); if(!text)return toast('Write the synthesized idea.');
       const ids=[...multiSelected],lineages=new Set();ids.forEach(id=>nodes.get(id).lineages.forEach(x=>lineages.add(x))); if(ids.length<2||lineages.size<2)return toast('Choose nodes from different branches.');
-      spend(2);const selected=ids.map(id=>nodes.get(id));const avgY=selected.reduce((s,n)=>s+n.y,0)/selected.length, maxX=Math.max(...selected.map(n=>n.x));
+      setMode(null);spend(2);const selected=ids.map(id=>nodes.get(id));const avgY=selected.reduce((s,n)=>s+n.y,0)/selected.length, maxX=Math.max(...selected.map(n=>n.x));
       const merged=createNode({text,type:'merge',parents:ids,x:Math.min(1230,maxX+275),y:Math.max(45,Math.min(760,avgY)),lineages});
       log('MERGE',`${ids.length} branches synthesized into ${label(merged)}.`);setMode(null);closeComposer();
     } else if(composerAction==='feedback'){

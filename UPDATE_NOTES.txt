@@ -1,0 +1,20 @@
+DATAFORGE — UPDATED FILES
+
+Apply this update
+-----------------
+Extract the Dataforge folder over your existing Dataforge (5) project and replace matching files. This ZIP contains changed files only; keep the existing assets, vendor files and other unchanged files. Eight section entry pages missing from the supplied archive are included.
+
+Changes
+-------
+- All 13 Architecture labs: removed the opaque decorative layer hiding their controls, diagrams and feedback. Kept the flat dark palette and cyan/amber controls.
+- Architecture: repaired repeated signal/forensics advancement, added working halt/continue/reset depth controls, protected reconstruction transitions, and synchronized classification and evidence state.
+- Shared interactions: improved component-canvas labels and keyboard access.
+- Inference Strategy / parallel sampling: correct answers gate progression; empty or tied hypothesis weights do not pass; changing weights or sample counts clears stale results; vote ties and plurality are labeled accurately; the final action restarts the experience.
+- Inference Strategy / graph search: unique branch lineages, correct selection after merging, chip checks on confirmation, keyboard node selection, and edges attached to actual node dimensions.
+- Inference Strategy / tree search: restored visible explored paths and preview images, fixed the cost indicator, preserved node state colors and sizing, enabled scrolling on narrow screens, and canceled pending manual backtracking when starting the AI visualization.
+- Restored comparison-grid sizing and responsive graph controls. Corrected the tree-game instructions to match actual behavior.
+- Removed malformed font-import remnants. Preserved the permanent whitish main-heading outline with no hover effect.
+
+Verification scope
+------------------
+Before the request to stop heavy verification, Architecture modules 1–10 were exercised in a browser. Remaining repairs received source review and lightweight checks only. JavaScript syntax checks passed for all 11 application scripts; all 9 HTML documents have no duplicate IDs or missing local href/src targets. No additional browser or end-to-end testing was performed after that request. The latest changes to modules 11–13 and Inference Strategy have not been browser-verified.

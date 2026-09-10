@@ -1,1 +1,79 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#05090e"><title>Tree Search</title><link rel="stylesheet" href="tree-graph.css"><link rel="stylesheet" href="../lesson-entry.css"></head><body><div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div><header class="site-header"><a class="back-home" href="../search/index.html">← Tree / Graph Search</a><span class="eyebrow">TREE OF THOUGHTS</span><span class="step-indicator">Choose an example</span></header><main><section id="chooser" class="chooser"><div><p class="kicker">Explore • Evaluate • Backtrack</p><h1>One problem.<br><span>Many possible paths.</span></h1><p class="lede">Choose an example and explore how a search finds its way.</p></div><div class="lesson-grid"><button class="lesson-card" data-lesson="maze"><span class="card-index">01</span><span class="card-visual reference-visual maze-visual" aria-hidden="true"></span><span class="card-label">Mini Maze</span><span class="card-copy">Explore A to Z</span><span class="card-arrow">↗</span></button><button class="lesson-card" data-lesson="planning"><span class="card-index">02</span><span class="card-visual reference-visual planning-visual" aria-hidden="true"></span><span class="card-label">Planning Problem</span><span class="card-copy">Three hours before a flight</span><span class="card-arrow">↗</span></button><button class="lesson-card" data-lesson="constraint"><span class="card-index">03</span><span class="card-visual reference-visual constraint-visual" aria-hidden="true"></span><span class="card-label">Constraint Puzzle</span><span class="card-copy">Find a valid arrangement</span><span class="card-arrow">↗</span></button></div></section><section id="lesson" class="lesson" hidden><div class="lesson-header"><div><p id="lessonType" class="lesson-type"></p><h1 id="lessonTitle"></h1></div><div class="lesson-controls"><button id="allExamples">All examples</button><button id="resetLesson">Reset</button></div></div><div id="problemStrip" class="problem-strip"></div><div id="processLine" class="process-line"></div><div id="stage" class="stage"></div><div id="dock" class="dock"></div></section></main><script src="tree-graph.js"></script><script src="../navigation.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050a10">
+  <meta name="description" content="Interactive Tree of Thoughts visualizations for search, planning, and constraint reasoning.">
+  <title>Tree Search — Test-Time Architectures</title>
+  <link rel="stylesheet" href="tree-graph.css">
+<link rel="stylesheet" href="../editorial.css">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="site-header">
+    <a class="back-home" href="../inference-strategy/index.html" aria-label="Back to architectures">
+      <span aria-hidden="true">←</span><span>Inference strategies</span>
+    </a>
+    <div class="eyebrow">TREE / GRAPH SEARCH</div>
+    <div class="step-indicator" aria-live="polite">Choose an example</div>
+  </header>
+
+  <main>
+    <section class="chooser" id="chooser" aria-labelledby="chooser-title">
+      <div class="chooser-copy">
+        <p class="kicker">THINK BY EXPLORING</p>
+        <h1 id="chooser-title">One idea.<br><span>Three search behaviors.</span></h1>
+        <p class="lede">Choose a problem and watch reasoning generate alternatives, reject weak paths, and continue from the most useful state.</p>
+      </div>
+
+      <div class="lesson-grid">
+        <button class="lesson-card image-card maze-card" type="button" data-lesson="maze">
+          <span class="card-index">01</span>
+          <span class="card-visual image-visual maze-visual" aria-hidden="true"></span>
+          <span class="card-label">Mini Maze</span>
+          <span class="card-copy">Explore → fail → backtrack</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </button>
+
+        <button class="lesson-card image-card planning-card" type="button" data-lesson="planning">
+          <span class="card-index">02</span>
+          <span class="card-visual image-visual planning-visual" aria-hidden="true"></span>
+          <span class="card-label">Planning Problem</span>
+          <span class="card-copy">Compare future consequences</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </button>
+
+        <button class="lesson-card image-card constraint-card" type="button" data-lesson="constraint">
+          <span class="card-index">03</span>
+          <span class="card-visual image-visual constraint-visual" aria-hidden="true"></span>
+          <span class="card-label">Constraint Puzzle</span>
+          <span class="card-copy">Prune impossible branches</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="lesson" id="lesson" hidden aria-live="polite">
+      <div class="lesson-topbar">
+        <button class="ghost-button" id="allExamples" type="button">← All examples</button>
+        <div class="lesson-title-wrap">
+          <p class="lesson-type" id="lessonType"></p>
+          <h2 id="lessonTitle"></h2>
+        </div>
+        <button class="ghost-button" id="resetLesson" type="button">Reset ↻</button>
+      </div>
+
+      <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Choose a problem, then follow the instruction above its play area.</li><li>Maze: click a cyan next node; dead ends backtrack automatically. Use Visualize with AI Agent to compare BFS and DFS. Planning: select a route and inspect its consequences, then compare another plan. Constraint puzzle: choose letters, inspect broken rules, and click Backtrack to revise a branch.</li><li>Continue until the goal or valid solution is revealed. Use Reset to try another path.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside>
+<div class="problem-strip" id="problemStrip"></div>
+      <div class="reasoning-stage" id="stage"></div>
+      <div class="interaction-dock" id="dock"></div>
+      <div class="process-line" id="processLine" aria-label="Reasoning process"></div>
+    </section>
+  </main>
+
+  <script src="tree-graph.js"></script>
+<script src="../lesson-ui.js"></script>
+</body>
+</html>

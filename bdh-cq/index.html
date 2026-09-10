@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Architecture — Interactive Lesson</title>
   <link rel="stylesheet" href="bdh.css">
+<link rel="stylesheet" href="../editorial.css">
 </head>
 <body>
   <header class="topbar">
@@ -22,7 +23,7 @@
         <p class="kicker">parameters / temporary inference-time information</p>
         <h1>How can a model learn a new rule without changing its weights?</h1>
 
-        <div class="stage-explainer opening-copy">
+        <div class="editorial-row"><div class="stage-explainer opening-copy">
           <p>During training, a model develops parameters that determine how it processes information.</p>
           <p>We can represent these learned parameters as:</p>
           <div class="concept-callout"><strong>θ — the trained machinery</strong></div>
@@ -37,14 +38,14 @@
           <p>Transformer, BDH, and HRM answer that question in very different ways.</p>
         </div>
 
-        <div class="interactive-lab locked-lab" id="lockedLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 01</p><img src="assets/state-lifecycle.svg" width="500" height="420" alt="Parameters stay fixed while temporary information changes."><figcaption>Parameters stay fixed while temporary information changes.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab locked-lab" id="lockedLab">
           <div class="lab-heading">
             <span>INTERACTIVE EXPERIMENT</span>
             <h3>Locked Machine</h3>
             <p>The trained machinery stays locked while temporary information changes the current computation.</p>
           </div>
 
-          <div class="locked-theta" aria-label="Locked model parameters">
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Read the example pairs, then click RUN WITH θ LOCKED.</li><li>Choose the cyan answer that explains where the new rule lives.</li><li>Repeat with the shape rule. Correct answers reveal the three machines.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="locked-theta" aria-label="Locked model parameters">
             <span class="theta-symbol">θ</span><span class="padlock">▣</span>
             <small>PARAMETERS LOCKED</small>
           </div>
@@ -90,7 +91,7 @@
             <div><b>HRM</b><span>?</span></div>
           </div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 2 -->
       <section class="stage content-heavy module-two" data-stage="2">
@@ -98,7 +99,7 @@
         <h2>Architecture Foundation</h2>
         <p class="stage-note module-subline">Three machines. Three computational organizations.</p>
 
-        <div class="stage-explainer architecture-copy">
+        <div class="editorial-row"><div class="stage-explainer architecture-copy">
           <h3>Three ways to organize reasoning</h3>
           <p>The same problem can be processed by very different computational structures.</p>
           <div class="architecture-three">
@@ -125,9 +126,9 @@
           </div>
         </div>
 
-        <div class="interactive-lab build-lab" id="buildLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 02</p><img src="assets/three-machines.svg" width="500" height="420" alt="Three structural sketches, drawn at the same visual scale."><figcaption>Three structural sketches, drawn at the same visual scale.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab build-lab" id="buildLab">
           <div class="lab-heading"><span>INTERACTIVE DEMO</span><h3>Build the Silhouette</h3><p>Build each reasoning machine using only its defining parts.</p></div>
-          <div class="silhouette-grid">
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Select a cyan component from the parts tray.</li><li>Click the matching machine to place it, or drag the component there.</li><li>Complete all three silhouettes. Use the feedback to revise a misplaced part.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="silhouette-grid">
             <div class="machine-build" data-machine="transformer"><h4>TRANSFORMER</h4><div class="machine-canvas transformer-canvas"><div class="machine-placeholder">drop defining parts here</div></div><div class="machine-status">0 / 2 parts</div></div>
             <div class="machine-build" data-machine="bdh"><h4>BDH</h4><div class="machine-canvas bdh-canvas"><div class="machine-placeholder">drop defining parts here</div></div><div class="machine-status">0 / 2 parts</div></div>
             <div class="machine-build" data-machine="hrm"><h4>HRM</h4><div class="machine-canvas hrm-canvas"><div class="machine-placeholder">drop defining parts here</div></div><div class="machine-status">0 / 3 parts</div></div>
@@ -151,13 +152,13 @@
             <blockquote>Now that the machines are built, what stays fixed, what remembers, and what changes while they reason?</blockquote>
           </div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 3 -->
       <section class="stage content-heavy module-three" data-stage="3">
         <p class="kicker">parameters / memory / workspace</p>
         <h2>What stays fixed? What persists? What is changing now?</h2>
-        <div class="stage-explainer role-copy">
+        <div class="editorial-row"><div class="stage-explainer role-copy">
           <p>Not everything inside a model serves the same role.</p>
           <p>During inference, it is useful to distinguish three concepts.</p>
           <div class="role-definition-grid">
@@ -169,9 +170,9 @@
           <blockquote class="lesson-quote">What stays fixed? What persists? What is currently changing?</blockquote>
         </div>
 
-        <div class="interactive-lab timeline-lab" id="timelineLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 03</p><img src="assets/state-lifecycle.svg" width="500" height="420" alt="The horizontal line tracks fixed θ; the changing trace represents temporary information."><figcaption>The horizontal line tracks fixed θ; the changing trace represents temporary information.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab timeline-lab" id="timelineLab">
           <div class="lab-heading"><span>INTERACTIVE SEGMENT</span><h3>Inside the Machine: A Timeline Scrubber</h3><p>Move through time to see which roles appear, persist, and change.</p></div>
-          <div class="timeline-objects">
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Click the cyan θ control to identify what survives training and unlock the slider.</li><li>Drag the timeline slider across test context, query, reasoning and answer.</li><li>Answer the questions that appear at the context and answer stages.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="timeline-objects">
             <button id="timelineTheta" class="timeline-object theta active-object"><small>PARAMETERS θ</small><strong>θ</strong><span>trained machinery</span></button>
             <div id="timelineMemory" class="timeline-object"><small>MEMORY / STATE</small><strong>M</strong><span>information carried forward</span></div>
             <div id="timelineWorkspace" class="timeline-object"><small>WORKSPACE</small><strong>W</strong><span>information actively transformed</span></div>
@@ -195,13 +196,13 @@
           <div class="feedback" id="timelineFeedback"></div>
           <p class="scrub-back-hint hidden" id="scrubBackHint">Now inspect the machine's history. Drag backward and forward freely.</p>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 4 -->
       <section class="stage content-heavy module-four" data-stage="4">
         <p class="kicker">temporary information carriers</p>
         <h2>How Does the Machine Remember?</h2>
-        <div class="stage-explainer memory-copy">
+        <div class="editorial-row"><div class="stage-explainer memory-copy">
           <h3>Information can disappear—or remain useful</h3>
           <p>Suppose the machine is shown:</p>
           <div class="inline-example"><code>A → RED</code><code>B → BLUE</code><code>C → GREEN</code><code>B → ?</code><strong>BLUE</strong></div>
@@ -243,9 +244,9 @@
           <blockquote class="lesson-quote final-copy-quote">All three can use information from earlier computation. What differs is where that information lives and how it is carried forward.</blockquote>
         </div>
 
-        <div class="interactive-lab eraser-lab" id="eraserLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 04</p><img src="assets/context-query.svg" width="500" height="420" alt="Erasing task memory can remove information needed by a later query."><figcaption>Erasing task memory can remove information needed by a later query.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab eraser-lab" id="eraserLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>MEMORY ERASER</h3><p>Three machines learned the same temporary association. Find where each one is keeping it.</p></div>
-          <div class="eraser-demos"><code>A → RED</code><code>B → BLUE</code><code>C → GREEN</code><i>then</i><code>B → ?</code></div>
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Read the temporary association and click each machine’s amber eraser control.</li><li>Compare the output after context, synaptic state or recurrent state is removed.</li><li>Match the resulting clues to machines, then complete the wrong-location challenge.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="eraser-demos"><code>A → RED</code><code>B → BLUE</code><code>C → GREEN</code><i>then</i><code>B → ?</code></div>
 
           <div class="eraser-machines">
             <article class="eraser-machine" data-eraser-machine="transformer">
@@ -308,14 +309,14 @@
             <p class="transition-line">The machine remembers the task. Now the actual query arrives.</p>
           </div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 5 -->
       <section class="stage content-heavy module-five" data-stage="5">
         <p class="kicker">05 / 14</p>
         <h2>The Query Arrives</h2>
 
-        <div class="stage-explainer architecture-copy query-arrives-copy">
+        <div class="editorial-row"><div class="stage-explainer architecture-copy query-arrives-copy">
           <p>Suppose the system has already processed useful information about a task.</p>
           <p>Then the actual query arrives:</p>
           <div class="inline-flow query-glyph"><strong>◆ → ?</strong></div>
@@ -337,11 +338,6 @@
               <small>BDH</small><h4>Inject activity into an evolving network</h4>
               <p>In BDH, the query enters a <strong>network of locally interacting neuron particles</strong>.</p>
               <p>The new input changes activity inside that network while interacting with its current state, including temporary synaptic structure built during previous processing.</p>
-              <pre class="concept-pre">existing network state
-        +
-      query
-        ↓
-new pattern of activity</pre>
               <p>The query therefore does not simply “look up an answer.”</p>
               <blockquote><strong>It perturbs an already evolving computational system.</strong></blockquote>
               <p>BDH is described as a scale-free graph of locally interacting units with inference-time synaptic working memory.</p>
@@ -351,19 +347,14 @@ new pattern of activity</pre>
               <p>In HRM, the input is embedded into representations used by two interacting recurrent modules:</p>
               <p><strong>H — high-level state</strong><br><strong>L — low-level state</strong></p>
               <p>The query therefore enters a system where computation will unfold repeatedly between a slower high-level process and a faster low-level process.</p>
-              <pre class="concept-pre">QUERY
-  ↓
-representation
-  ↓
-H ↔ L</pre>
-            </article>
+              </article>
           </div>
           <blockquote class="lesson-quote final-copy-quote"><strong>Same query. Different machinery begins operating on it.</strong></blockquote>
         </div>
 
-        <div class="interactive-lab query-port-lab" id="queryPortLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 05</p><img src="assets/three-machines.svg" width="500" height="420" alt="The same input meets a different organization of computation."><figcaption>The same input meets a different organization of computation.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab query-port-lab" id="queryPortLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Query Port</h3><p>The problem is identical. Send it into each machine and inspect what happens first.</p></div>
-          <div id="queryToken" class="query-token" draggable="true" aria-label="Draggable query">◆ → ?<small>DRAG OR CLICK, THEN CHOOSE A PORT</small></div>
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Click the query token, then click a cyan machine port; dragging also works.</li><li>Send the same query into all three machines and read each trace.</li><li>Match the unlabeled traces to their architectures, then click CHECK MATCH.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div id="queryToken" class="query-token" draggable="true" aria-label="Draggable query">◆ → ?<small>DRAG OR CLICK, THEN CHOOSE A PORT</small></div>
           <div class="query-ports">
             <button class="query-port" data-query-port="transformer"><small>TRANSFORMER</small><strong>ATTENTION PORT</strong><span class="port-visual attention-port"><i></i><i></i><i></i><i></i></span><em>waiting for query</em></button>
             <button class="query-port" data-query-port="bdh"><small>BDH</small><strong>LOCAL NETWORK PORT</strong><span class="port-visual bdh-port"><i></i><i></i><i></i><i></i><i></i></span><em>waiting for query</em></button>
@@ -383,7 +374,7 @@ H ↔ L</pre>
           </div>
           <div class="module-takeaway hidden" id="queryPortTakeaway"><strong>The query is the same. Architecture determines what happens next.</strong><span>But once the query enters, where does the actual computation happen?</span></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 6 -->
       <section class="stage content-heavy module-six" data-stage="6">
@@ -391,7 +382,7 @@ H ↔ L</pre>
         <h2>Where Does the Reasoning Happen?</h2>
         <p class="stage-note">The internal representations that are transformed between input and answer.</p>
 
-        <div class="stage-explainer architecture-copy hidden-room-copy">
+        <div class="editorial-row"><div class="stage-explainer architecture-copy hidden-room-copy">
           <h3>Between the query and the answer lies internal computation.</h3>
           <div class="inline-flow"><strong>INPUT → ? → OUTPUT</strong></div>
           <p>The <strong>?</strong> is where representations are transformed.</p>
@@ -400,21 +391,15 @@ H ↔ L</pre>
 
           <div class="architecture-three reasoning-architecture-three">
             <article><small>TRANSFORMER</small><h4>Successive hidden representations</h4><p>A Transformer repeatedly transforms representations through its layers.</p><div class="mini-stack horizontal"><code>X₀</code><i>→</i><code>X₁</code><i>→</i><code>X₂</code><i>→</i><code>…</code><i>→</i><code>Xₙ</code></div><p>Each layer combines <strong>attention</strong> with <strong>feed-forward transformation</strong> to produce updated hidden representations.</p><p>In an autoregressive language model, additional forward evaluations occur as new output tokens are generated.</p><blockquote><strong>Useful computation occurs inside changing hidden representations before we see the output.</strong></blockquote></article>
-            <article><small>BDH</small><h4>Evolving network activity and state</h4><p>BDH's computation is distributed across its network.</p><p>Sparse node activations, local interactions and dynamic synaptic state jointly influence what happens next.</p><pre class="concept-pre network-pre">○ ─ ○
-  ╲ │
-○ → ● → ○
-    ↓
-    ○</pre><blockquote><strong>The computation exists in the evolving network state.</strong></blockquote></article>
-            <article><small>HRM</small><h4>Recurrent latent computation</h4><p>HRM makes repeated internal computation especially explicit.</p><p>Its high-level and low-level modules recursively update their hidden states. The high-level module changes more slowly; the low-level module performs faster detailed computation.</p><pre class="concept-pre">H₀ ─────→ H₁
- ↓         ↓
-L₀→L₁→L₂→L₃</pre><p>These intermediate states do not have to be translated into a textual Chain-of-Thought.</p></article>
+            <article><small>BDH</small><h4>Evolving network activity and state</h4><p>BDH's computation is distributed across its network.</p><p>Sparse node activations, local interactions and dynamic synaptic state jointly influence what happens next.</p><blockquote><strong>The computation exists in the evolving network state.</strong></blockquote></article>
+            <article><small>HRM</small><h4>Recurrent latent computation</h4><p>HRM makes repeated internal computation especially explicit.</p><p>Its high-level and low-level modules recursively update their hidden states. The high-level module changes more slowly; the low-level module performs faster detailed computation.</p><p>These intermediate states do not have to be translated into a textual Chain-of-Thought.</p></article>
           </div>
           <blockquote class="lesson-quote final-copy-quote"><strong>Reasoning can occur as transformations of hidden state rather than as visible reasoning text.</strong></blockquote>
         </div>
 
-        <div class="interactive-lab hidden-room-lab" id="hiddenRoomLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 06</p><img src="assets/context-query.svg" width="500" height="420" alt="Latent computation can continue before an answer is emitted."><figcaption>Latent computation can continue before an answer is emitted.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab hidden-room-lab" id="hiddenRoomLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Hidden Room</h3><p>If no words are being produced, is the machine still computing?</p></div>
-          <div class="output-switch off" id="outputSwitch"><span>OUTPUT SCREEN</span><strong>OFF</strong></div>
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Click SEND QUERY WITH OUTPUT OFF.</li><li>Watch the internal states; use FREEZE to inspect the Transformer.</li><li>Choose an explanation, then turn output back on to see the answer.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="output-switch off" id="outputSwitch"><span>OUTPUT SCREEN</span><strong>OFF</strong></div>
           <button class="primary" id="runHiddenRoom">SEND QUERY WITH OUTPUT OFF</button>
           <div class="hidden-machines" id="hiddenMachines">
             <article data-hidden-machine="transformer"><small>TRANSFORMER</small><h4>Hidden layers</h4><div class="layer-chain"><b>L1</b><i>→</i><b>L2</b><i>→</i><b>L3</b><i>→</i><b>L4</b></div><button class="ghost freeze-transformer" disabled>FREEZE</button><p class="hidden-state-readout">Current internal representation: <strong>X₀</strong></p></article>
@@ -426,7 +411,7 @@ L₀→L₁→L₂→L₃</pre><p>These intermediate states do not have to be tr
           <div class="hidden-output-reveal hidden" id="hiddenOutputReveal"><span>TRANSFORMER → ANSWER</span><span>BDH → ANSWER</span><span>HRM → ANSWER</span></div>
           <div class="module-takeaway hidden" id="hiddenRoomTakeaway"><strong>Visible output is only the end of the computation.</strong><span>If computation happens internally, how does information travel through that machinery?</span></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 7 -->
       <section class="stage content-heavy module-seven" data-stage="7">
@@ -434,24 +419,20 @@ L₀→L₁→L₂→L₃</pre><p>These intermediate states do not have to be tr
         <h2>How Does Information Move?</h2>
         <p class="stage-note">The communication topology of each architecture.</p>
 
-        <div class="stage-explainer architecture-copy signal-move-copy">
-          <p>Imagine five pieces of information:</p><div class="inline-flow"><strong>A &nbsp; B &nbsp; C &nbsp; D &nbsp; E</strong></div>
+        <div class="editorial-row"><div class="stage-explainer architecture-copy signal-move-copy">
+          <p>Imagine five pieces of information:</p><div class="inline-flow"><strong>A   B   C   D   E</strong></div>
           <p>Suppose the information in <strong>A</strong> becomes important for processing <strong>E</strong>.</p>
           <p>Different architectures provide different routes through which that influence can occur.</p>
           <div class="architecture-three signal-architecture-three">
-            <article><small>TRANSFORMER</small><h4>Dynamic relevance routes</h4><p>Self-attention computes relationships between representations.</p><p>A representation can assign greater influence to some accessible positions and less to others. So the effective routes depend on the current input.</p><pre class="concept-pre">A ─────────→ E
-B ──→ D
-C ─────→ A</pre><p>The route is not simply “move one step to the neighbor.” It is formed according to attention relationships.</p></article>
+            <article><small>TRANSFORMER</small><h4>Dynamic relevance routes</h4><p>Self-attention computes relationships between representations.</p><p>A representation can assign greater influence to some accessible positions and less to others. So the effective routes depend on the current input.</p><p>The route is not simply “move one step to the neighbor.” It is formed according to attention relationships.</p></article>
             <article><small>BDH</small><h4>Local interaction builds longer-range influence</h4><p>BDH starts from a different organization. Its neuron particles form a graph where individual units interact <strong>locally</strong>.</p><div class="inline-flow"><strong>A → B → C → E</strong></div><p>Because the graph has non-uniform connectivity, some nodes can also serve as highly connected hubs.</p><blockquote><strong>Global behavior can emerge from structured local communication.</strong></blockquote></article>
-            <article><small>HRM</small><h4>Information moves across timescales</h4><p>HRM's defining information flow is hierarchical.</p><p>Fast computation occurs inside the L module. Its evolving state interacts with the slower H module. The high-level state then influences later low-level computation.</p><pre class="concept-pre">      H
-      ↑↓
-L → L → L → L</pre><p>Information moves not just across representations, but also between <strong>levels operating at different timescales</strong>.</p></article>
+            <article><small>HRM</small><h4>Information moves across timescales</h4><p>HRM's defining information flow is hierarchical.</p><p>Fast computation occurs inside the L module. Its evolving state interacts with the slower H module. The high-level state then influences later low-level computation.</p><p>Information moves not just across representations, but also between <strong>levels operating at different timescales</strong>.</p></article>
           </div>
         </div>
 
-        <div class="interactive-lab deliver-signal-lab" id="deliverSignalLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 07</p><img src="assets/information-routes.svg" width="500" height="420" alt="Edges show possible influence, not measured attention weights."><figcaption>Edges show possible influence, not measured attention weights.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab deliver-signal-lab" id="deliverSignalLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Deliver the Signal</h3><p>Get information in A to influence E through each architecture.</p></div>
-          <div class="signal-rounds">
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Increase E’s attention to A with the cyan slider until the next round opens.</li><li>Click the BDH propagation control to move the signal through local steps.</li><li>Pass the HRM signal across H / L states, then match the three unlabeled routes.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="signal-rounds">
             <article class="signal-round active" data-signal-round="transformer"><small>TRANSFORMER ROUND</small><h4>Inspect E's attention route</h4><div class="attention-route"><b>A</b><b>B</b><b>C</b><b>D</b><strong>E</strong><span id="attentionBeam"></span></div><label class="attention-dial">ATTENTION TO A <input id="attentionDial" type="range" min="0" max="100" value="10"><output id="attentionValue">10%</output></label><div class="signal-feedback" id="transformerSignalFeedback">Increase E's attention to A.</div></article>
             <article class="signal-round" data-signal-round="bdh"><small>BDH ROUND</small><h4>Propagate one local step at a time</h4><div class="bdh-route" id="bdhRoute"><b data-bdh-node="A">A</b><i>—</i><b data-bdh-node="B">B</b><i>—</i><b data-bdh-node="C">C</b><i>—</i><b data-bdh-node="E">E</b><span class="branch">B<br>│<br>D</span></div><button class="primary" id="propagateBdh">PROPAGATE</button><div class="signal-feedback" id="bdhSignalFeedback">Signal starts at A.</div></article>
             <article class="signal-round" data-signal-round="hrm"><small>HRM ROUND</small><h4>Move detail across levels and timescales</h4><div class="hrm-transfer" id="hrmTransfer"><b data-level="l1">L · clue</b><i>→</i><b data-level="h">H · abstraction</b><i>→</i><b data-level="l2">L · next cycle</b></div><div class="hrm-transfer-controls"><button class="ghost" id="transferUp">TRANSFER L → H</button><button class="ghost" id="transferDown" disabled>TRANSFER H → L</button></div><div class="signal-feedback" id="hrmSignalFeedback">A useful detail currently lives in L.</div></article>
@@ -460,14 +441,14 @@ L → L → L → L</pre><p>Information moves not just across representations, b
           <div class="blind-challenge hidden" id="signalBlindChallenge"><h4>Final blind round</h4><p>Match each route to its architecture.</p><div class="blind-route-matches"><label>dynamic long-range relevance links<select data-route-match="transformer"><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></label><label>local graph propagation<select data-route-match="bdh"><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></label><label>fast/slow hierarchical recurrence<select data-route-match="hrm"><option value="">Choose</option><option>Transformer</option><option>BDH</option><option>HRM</option></select></label></div><button class="ghost" id="checkSignalBlind">CHECK ROUTES</button><div class="feedback" id="signalBlindFeedback"></div></div>
           <div class="module-takeaway hidden" id="signalTakeaway"><strong>Architecture is partly a rule for who can communicate with whom—and how.</strong><span>Now that information is moving, can you identify which part is carrying each kind of information?</span></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 8 -->
       <section class="stage content-heavy module-eight" data-stage="8">
         <p class="kicker">08 / 14</p>
         <h2>Which Part Carries This Information?</h2>
         <p class="stage-note">Retrieval and discrimination.</p>
-        <div class="stage-explainer architecture-copy forensic-copy">
+        <div class="editorial-row"><div class="stage-explainer architecture-copy forensic-copy">
           <p>During computation, different information can belong to different places.</p>
           <p>You have now seen:</p>
           <div class="carrier-grid"><div><strong>θ — trained machinery</strong><span>information learned during training</span></div><div><strong>context / temporary state</strong><span>information retained during the current task</span></div><div><strong>active representations</strong><span>information currently being transformed</span></div><div><strong>architecture-specific structures</strong><span>attention · dynamic synaptic state · H / L recurrent states</span></div></div>
@@ -475,9 +456,9 @@ L → L → L → L</pre><p>Information moves not just across representations, b
           <p>and instead ask:</p><blockquote class="lesson-quote"><strong>Which mechanism is carrying it right now?</strong></blockquote>
         </div>
 
-        <div class="interactive-lab signal-forensics-lab" id="signalForensicsLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 08</p><img src="assets/state-lifecycle.svg" width="500" height="420" alt="Locate the information in parameters, memory or current workspace."><figcaption>Locate the information in parameters, memory or current workspace.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab signal-forensics-lab" id="signalForensicsLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Signal Forensics</h3><p>A machine has been frozen mid-computation. Locate where the highlighted information is being carried.</p></div>
-          <div class="forensic-case" id="forensicCase">
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Read the clue in the current forensic case.</li><li>Select the cyan target carrying that information; use the feedback for the next case.</li><li>In the final case, choose an architecture and role, then click IDENTIFY CARRIER.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="forensic-case" id="forensicCase">
             <div class="forensic-case-head"><span id="forensicIndex">CASE 1 / 5</span><strong id="forensicArchitecture">TRAINING KNOWLEDGE</strong></div>
             <p id="forensicClue">“This information was learned from millions of training examples and exists before the current task arrives.”</p>
             <div class="forensic-machine" id="forensicMachine"></div>
@@ -487,40 +468,30 @@ L → L → L → L</pre><p>Information moves not just across representations, b
           <div class="blind-challenge hidden" id="forensicFinal"><h4>Final forensic case</h4><p>Architecture labels disappear. Identify both architecture and role.</p><div class="final-forensic-visual"><span class="changing-synapse"></span><b>changing synaptic connection</b></div><div class="forensic-final-selects"><select id="forensicArchSelect"><option value="">Architecture</option><option>Transformer</option><option>BDH</option><option>HRM</option></select><select id="forensicRoleSelect"><option value="">Role</option><option>permanent parameters</option><option>temporary working state</option><option>output prediction</option></select></div><button class="ghost" id="checkForensicFinal">IDENTIFY CARRIER</button><div class="feedback" id="forensicFinalFeedback"></div></div>
           <div class="module-takeaway hidden" id="forensicTakeaway"><strong>“The model knows it” is not enough. Ask where the information currently lives.</strong><span>Once the internal computation is complete, how does hidden state become an observable answer?</span></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 9 -->
       <section class="stage content-heavy module-nine" data-stage="9">
         <p class="kicker">09 / 14</p>
         <h2>From Internal State to Prediction</h2>
         <p class="stage-note">The distinction between internal representation and output representation.</p>
-        <div class="stage-explainer architecture-copy decoder-copy">
+        <div class="editorial-row"><div class="stage-explainer architecture-copy decoder-copy">
           <h3>The model's internal state is not yet the answer.</h3>
           <p>Inside the machine, information exists as numerical representations.</p>
           <p>Those internal representations may encode everything required to solve the problem—but they still have to be converted into something the task expects.</p>
           <div class="output-types"><span>a token</span><span>a class label</span><span>a grid</span><span>an action</span></div>
           <p>This final conversion is performed through an <strong>output mapping/head/decoder</strong>, depending on the model and task.</p>
           <div class="architecture-three decoder-architecture-three">
-            <article><small>TRANSFORMER</small><h4>Language generation</h4><p>For language generation, the current hidden representation is typically projected into scores over the vocabulary.</p><pre class="concept-pre">hidden representation
-        ↓
-vocabulary scores
-        ↓
-probabilities
-        ↓
-next token</pre></article>
+            <article><small>TRANSFORMER</small><h4>Language generation</h4><p>For language generation, the current hidden representation is typically projected into scores over the vocabulary.</p></article>
             <article><small>BDH</small><h4>Internal state → task output</h4><p>The evolving BDH representation similarly has to be mapped from the network's internal state into the output required by the task.</p><p>The important distinction is not a special “BDH decoder.”</p><blockquote><strong>network state ≠ observable answer</strong></blockquote></article>
-            <article><small>HRM</small><h4>Output head</h4><p>HRM's published sequence-to-sequence implementation includes an output head that transforms hidden states into token probability distributions.</p><pre class="concept-pre">final recurrent state
-       ↓
-output head
-       ↓
-prediction</pre></article>
+            <article><small>HRM</small><h4>Output head</h4><p>HRM's published sequence-to-sequence implementation includes an output head that transforms hidden states into token probability distributions.</p></article>
           </div>
           <blockquote class="lesson-quote final-copy-quote"><strong>Internal computation creates a representation. Decoding exposes a prediction.</strong></blockquote>
         </div>
 
-        <div class="interactive-lab decoder-dock-lab" id="decoderDockLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 09</p><img src="assets/decoder.svg" width="500" height="420" alt="An output mapping turns an internal representation into a prediction."><figcaption>An output mapping turns an internal representation into a prediction.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab decoder-dock-lab" id="decoderDockLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Decoder Dock</h3><p>Three machines have finished thinking. Their output cable is disconnected.</p></div>
-          <div class="opaque-state"><small>INTERNAL STATE</small><strong>████▒▒██▒█</strong><i>?</i><small>OUTPUT</small></div>
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Choose a task tab: language, classification or grid.</li><li>Click the cyan output-head choice that fits that task and inspect the result.</li><li>Repeat for all three tasks. Try the incompatible-head example to see why output mapping matters.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="opaque-state"><small>INTERNAL STATE</small><strong>████▒▒██▒█</strong><i>?</i><small>OUTPUT</small></div>
           <p class="decoder-question">Can you read the answer directly? <strong>No — connect the correct output mapping.</strong></p>
           <div class="dock-tabs" id="dockTabs"><button class="active" data-dock="language">LANGUAGE</button><button data-dock="class">CLASSIFICATION</button><button data-dock="grid">GRID TASK</button></div>
           <div class="dock-stage" id="dockStage">
@@ -531,12 +502,12 @@ prediction</pre></article>
           <div class="feedback" id="dockFeedback"></div>
           <div class="module-takeaway hidden" id="decoderTakeaway"><strong>Reasoning happens inside. Prediction is what gets exposed outside.</strong><span>You now know every stage individually. What happens when the three machines solve the same problem side-by-side?</span></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 10 -->
       <section class="stage content-heavy" data-stage="10">
         <p class="kicker">10 / 14</p><h2>Same Problem, Three Machines</h2>
-        <div class="stage-explainer compare-copy">
+        <div class="editorial-row"><div class="stage-explainer compare-copy">
           <p><strong>Integration through controlled comparison.</strong></p>
           <h3>Hold the problem constant.</h3>
           <p>To compare architectures fairly at a conceptual level, give them the <strong>same task</strong>. Then watch only what changes:</p>
@@ -551,9 +522,9 @@ prediction</pre></article>
           <blockquote class="lesson-quote"><strong>The same external problem can be solved through fundamentally different internal computational organizations.</strong></blockquote>
         </div>
 
-        <div class="interactive-lab replay-lab" id="threeMachineReplay">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 10</p><img src="assets/three-machines.svg" width="500" height="420" alt="Compare structure while holding the problem constant."><figcaption>Compare structure while holding the problem constant.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab replay-lab" id="threeMachineReplay">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Three-Machine Replay</h3><p>One input. Three machines. Scrub through the same computation timeline.</p></div>
-          <div class="same-input-card"><small>SAME INPUT</small><strong>◆ → ?</strong><button class="primary" id="runAllMachines">RUN ALL</button></div>
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Click RUN ALL, then drag the timeline slider to compare the three states.</li><li>Select each route card and click its destination, or drag it into place.</li><li>Place the permanent-weight-update card under NONE, then complete the comparison.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="same-input-card"><small>SAME INPUT</small><strong>◆ → ?</strong><button class="primary" id="runAllMachines">RUN ALL</button></div>
           <div class="replay-timeline-wrap hidden" id="replayTimelineWrap">
             <div class="replay-labels"><span>INPUT</span><span>EARLY</span><span>MIDDLE</span><span>LATE</span><span>OUTPUT</span></div>
             <input id="replayScrubber" class="replay-scrubber" type="range" min="0" max="4" value="0" step="1" aria-label="Unified machine timeline">
@@ -583,51 +554,42 @@ prediction</pre></article>
           </div>
           <div class="module-takeaway hidden" id="replayTakeaway"><strong>Same task. Same answer. Different route through the machine.</strong><span>But these routes don't all unfold in the same way over computational depth and time.</span></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 11 -->
       <section class="stage content-heavy" data-stage="11">
         <p class="kicker">11 / 14</p><h2>How Deep Can the Machine Think?</h2>
-        <div class="stage-explainer depth-copy">
+        <div class="editorial-row"><div class="stage-explainer depth-copy">
           <p><strong>How computation unfolds structurally before introducing deliberate test-time compute allocation.</strong></p>
           <p>Not every architecture obtains computational depth in the same way.</p>
           <p>A computation can become deeper because information passes through more transformations, because a state is repeatedly updated, or because recurrent modules perform additional cycles.</p>
           <div class="architecture-three depth-architecture-three">
-            <article><small>TRANSFORMER</small><h4>Depth through stacked transformations</h4><pre class="concept-pre">X₀
-↓
-Block 1
-↓
-X₁
-↓
-Block 2
-↓
-X₂
-...</pre><p>Each block includes attention and feed-forward computation. For a fixed standard architecture, the layer stack provides a fixed amount of depth per forward evaluation.</p></article>
-            <article><small>BDH</small><h4>Computation through evolving state</h4><pre class="concept-pre">state₀ → state₁ → state₂ → ...</pre><p>BDH combines its graph organization with state-space sequence processing, so its computation can be understood partly as an evolving system rather than only as one static graph evaluation.</p></article>
+            <article><small>TRANSFORMER</small><h4>Depth through stacked transformations</h4><p>Each block includes attention and feed-forward computation. For a fixed standard architecture, the layer stack provides a fixed amount of depth per forward evaluation.</p></article>
+            <article><small>BDH</small><h4>Computation through evolving state</h4><p>BDH combines its graph organization with state-space sequence processing, so its computation can be understood partly as an evolving system rather than only as one static graph evaluation.</p></article>
             <article><small>HRM</small><h4>Depth through hierarchical recurrence</h4><p>The lower-level module performs rapid updates while the high-level module changes more slowly. HRM also includes adaptive computation time across computational segments.</p><blockquote><strong>Variable recurrent computational depth is explicit.</strong></blockquote></article>
           </div>
           <div class="important-concept compact-important"><strong>Important boundary</strong><p><strong>Architecture tells us what kinds of computation are possible inside the machine.</strong></p><span>Another question remains: if extra inference compute is available, how should we allocate it? Save that for <strong>How Is Compute Spent?</strong></span></div>
         </div>
 
-        <div class="interactive-lab depth-elevator-lab" id="depthElevatorLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 11</p><img src="assets/reasoning-depth.svg" width="500" height="455" alt="Depth can mean stacked layers or repeated state updates. Update ratios here are illustrative."><figcaption>Depth can mean stacked layers or repeated state updates. Update ratios here are illustrative.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab depth-elevator-lab" id="depthElevatorLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Depth Elevator</h3><p>Move one level deeper and watch what “depth” means for each architecture.</p></div>
-          <div class="depth-shafts">
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Click GO DEEPER to advance all three machines.</li><li>Compare Transformer layers, BDH state and HRM’s H / L updates.</li><li>At an HRM segment boundary, choose HALT or CONTINUE and inspect what changes.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="depth-shafts">
             <article data-depth-machine="transformer"><small>TRANSFORMER</small><div class="depth-window" id="transformerDepth">DEPTH 0</div><p>STACK</p></article>
             <article data-depth-machine="bdh"><small>BDH</small><div class="depth-window" id="bdhDepth">STATE 0</div><p>EVOLVE</p></article>
             <article data-depth-machine="hrm"><small>HRM</small><div class="depth-window hrm-depth-window" id="hrmDepth"><b>H₀</b><span>L₀</span></div><p>RECUR AT TWO TIMESCALES</p></article>
           </div>
-          <button class="primary depth-lever" id="goDeeper">GO DEEPER</button>
+          <button class="primary depth-lever" id="goDeeper">GO DEEPER</button> <button class="ghost" id="resetDepth">RESET DEPTH</button>
           <div class="feedback" id="depthFeedback">Depth 0 — all three machines are at their starting state.</div>
           <div class="halt-panel hidden" id="haltPanel"><small>HRM SEGMENT BOUNDARY</small><div><button class="ghost" id="haltChoice">HALT</button><button class="primary" id="continueChoice">CONTINUE</button></div><p>HRM includes an adaptive halting mechanism for deciding whether additional segments are useful.</p></div>
           <div class="depth-summary hidden" id="depthSummary"><div><small>TRANSFORMER</small><strong>STACK</strong></div><div><small>BDH</small><strong>EVOLVE</strong></div><div><small>HRM</small><strong>RECUR AT TWO TIMESCALES</strong></div></div>
           <div class="module-takeaway hidden" id="depthTakeaway"><strong>You understand how the machines compute. Next, prove you can rebuild them.</strong></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 12 -->
       <section class="stage content-heavy" data-stage="12">
         <p class="kicker">12 / 14</p><h2>Reconstruct the Machine</h2>
-        <div class="stage-explainer reconstruct-copy">
+        <div class="editorial-row"><div class="stage-explainer reconstruct-copy">
           <p><strong>Generative understanding.</strong></p>
           <h3>Recognition is easier than reconstruction.</h3>
           <p>Seeing “H module + L module” and choosing HRM is one thing. Starting with an empty machine and deciding what is <strong>essential</strong> is much harder.</p>
@@ -635,9 +597,9 @@ X₂
           <p>You will also see mechanisms that belong elsewhere: <strong>tree search, majority vote, weight update, prompt modification.</strong> Those can be useful at test time—but they are not defining components of these three architectures.</p>
         </div>
 
-        <div class="interactive-lab reconstruction-lab" id="reconstructionLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 12</p><img src="assets/information-routes.svg" width="500" height="420" alt="Use the communication structure to reconstruct each machine."><figcaption>Use the communication structure to reconstruct each machine.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab reconstruction-lab" id="reconstructionLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>Black Box Reconstruction</h3><p>Observe an unlabeled machine, then rebuild the smallest explanation that fits the evidence.</p></div>
-          <div class="observation-window" id="observationWindow"><small>PHASE 1 — OBSERVE</small><strong id="observationTitle">Dynamic long-range relevance links appear.</strong><div id="observationVisual" class="observation-visual transformer-observation"><i></i><i></i><i></i></div><button class="primary" id="beginRebuild">REBUILD FROM MEMORY</button></div>
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Inspect the unlabeled machine, then click REBUILD FROM MEMORY.</li><li>Select a cyan component, then click the cyan canvas to place it; dragging also works.</li><li>Click CHECK MACHINE. Use CLEAR to revise the build; avoid strategy and training distractors.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="observation-window" id="observationWindow"><small>PHASE 1 — OBSERVE</small><strong id="observationTitle">Dynamic long-range relevance links appear.</strong><div id="observationVisual" class="observation-visual transformer-observation"><i></i><i></i><i></i></div><button class="primary" id="beginRebuild">REBUILD FROM MEMORY</button></div>
           <div class="rebuild-phase hidden" id="rebuildPhase">
             <div class="rebuild-head"><small id="rebuildIndex">RECONSTRUCTION A / 3</small><strong id="rebuildPrompt">Use the smallest set of components needed to explain what you observed.</strong></div>
             <div class="component-pool" id="componentPool">
@@ -649,12 +611,12 @@ X₂
           </div>
           <div class="module-takeaway hidden" id="reconstructTakeaway"><strong>Architecture describes the reasoning machine—not every strategy that can be placed around it.</strong><span>The labels disappear now. Identify the machine from evidence alone.</span></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 13 -->
       <section class="stage content-heavy final-check" data-stage="13">
         <p class="kicker">13 / 14</p><h2>Final Check: Identify the Machine</h2>
-        <div class="stage-explainer identify-copy">
+        <div class="editorial-row"><div class="stage-explainer identify-copy">
           <h3>IDENTIFY THE MACHINE</h3>
           <p>Three architectures. No labels. Look for structural evidence.</p>
           <div class="architecture-three evidence-guide">
@@ -665,9 +627,9 @@ X₂
           <blockquote class="lesson-quote"><strong>Do not identify a machine from one buzzword. Use several pieces of evidence together.</strong></blockquote>
         </div>
 
-        <div class="interactive-lab black-box-lab" id="blackBoxLab">
+        <figure class="architecture-figure"><p class="figure-index">Architecture / figure 13</p><img src="assets/reasoning-depth.svg" width="500" height="455" alt="Use structural evidence, including recurrence and timescales, to identify the machine."><figcaption>Use structural evidence, including recurrence and timescales, to identify the machine.<br>Original schematic · sources below.</figcaption></figure></div><div class="interactive-lab black-box-lab" id="blackBoxLab">
           <div class="lab-heading"><span>INTERACTIVE GAME</span><h3>The Black Box Lab</h3><p>Run three experiments before you are allowed to classify α, β, and γ.</p></div>
-          <div class="black-box-machines">
+          <aside class="game-instructions" aria-label="How to play"><strong>HOW TO PLAY</strong><ol><li>Run INJECT INPUT, REVEAL TEMPORARY STATE and STEP COMPUTATION in order.</li><li>Select an architecture label and click its machine, or drag it into place.</li><li>Choose two reasons for each machine, check your evidence, then identify the impostor clue.</li></ol><div class="control-legend"><span>CYAN · choose / move</span><span class="action-key">AMBER · run / check</span><span class="result-key">GREEN · correct / complete</span></div></aside><div class="black-box-machines">
             <article data-blackbox="alpha"><small>MACHINE α</small><div class="blackbox-visual alpha-visual"><i></i><i></i><i></i><i></i></div><p class="blackbox-readout">No evidence yet.</p></article>
             <article data-blackbox="beta"><small>MACHINE β</small><div class="blackbox-visual beta-visual"><i></i><i></i><i></i><i></i><i></i></div><p class="blackbox-readout">No evidence yet.</p></article>
             <article data-blackbox="gamma"><small>MACHINE γ</small><div class="blackbox-visual gamma-visual"><b>H</b><span><i>L</i><i>L</i><i>L</i></span></div><p class="blackbox-readout">No evidence yet.</p></article>
@@ -681,9 +643,9 @@ X₂
           </div>
           <div class="evidence-phase hidden" id="evidencePhase"><h4>Evidence requirement</h4><p>For each machine, select <strong>two reasons</strong>. Guessing is not accepted.</p><div id="evidenceCases"></div><button class="primary" id="checkEvidence">CHECK EVIDENCE</button><div class="feedback" id="evidenceFeedback"></div></div>
           <div class="impostor-phase hidden" id="impostorPhase"><small>FINAL CHALLENGE — THE IMPOSTOR CLUE</small><h4>MACHINE γ</h4><div class="impostor-clues"><button>High-level recurrent state</button><button>Low-level recurrent state</button><button>Fast/slow computation</button><button data-impostor>Explores 32 independent solution samples and majority-votes them</button></div><p>Which clue describes an <strong>external inference strategy</strong> rather than the architecture itself?</p><div class="feedback" id="impostorFeedback"></div></div>
-          <div class="chapter-reveal hidden" id="chapterReveal"><small>FINAL CHAPTER REVEAL</small><h3>WHAT DOES THE THINKING?</h3><div class="final-machine-map"><article><small>TRANSFORMER</small><strong>ATTEND</strong><p>attention + feed-forward computation</p></article><article><small>BDH</small><strong>INTERACT</strong><p>local graph + dynamic synaptic state</p></article><article><small>HRM</small><strong>COORDINATE</strong><p>H / L recurrent computation at different timescales</p></article></div><blockquote><strong>You now know what the reasoning machine is.</strong></blockquote><div class="compute-budget"><label>COMPUTE BUDGET</label><input type="range" min="1" max="32" value="1" id="computeBudget"><output id="computeBudgetOutput">1×</output></div><p><strong>But what should the system do with more computation before answering?</strong></p><a class="compute-next" href="#">→ HOW IS COMPUTE SPENT?</a></div>
+          <div class="chapter-reveal hidden" id="chapterReveal"><small>FINAL CHAPTER REVEAL</small><h3>WHAT DOES THE THINKING?</h3><div class="final-machine-map"><article><small>TRANSFORMER</small><strong>ATTEND</strong><p>attention + feed-forward computation</p></article><article><small>BDH</small><strong>INTERACT</strong><p>local graph + dynamic synaptic state</p></article><article><small>HRM</small><strong>COORDINATE</strong><p>H / L recurrent computation at different timescales</p></article></div><blockquote><strong>You now know what the reasoning machine is.</strong></blockquote><div class="compute-budget"><label>COMPUTE BUDGET</label><input type="range" min="1" max="32" value="1" id="computeBudget"><output id="computeBudgetOutput">1×</output></div><p><strong>But what should the system do with more computation before answering?</strong></p><a class="compute-next" href="../inference-strategy/index.html">→ HOW IS COMPUTE SPENT?</a></div>
         </div>
-      </section>
+      <div class="figure-sources"><strong>Diagram sources</strong><p>Original SVG schematics created for this lesson from the papers below. Simplified mechanisms, not copied paper figures or benchmark charts.</p><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Transformer · Vaswani et al., 2017</a><a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">BDH · Kosowski et al., 2025</a><a href="https://arxiv.org/abs/2506.21734" target="_blank" rel="noopener">HRM · Wang et al., 2025</a><a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ · Engdahl et al., 2026</a></div></section>
 
       <!-- MODULE 14 -->
       <section class="stage" data-stage="14">
@@ -699,5 +661,6 @@ X₂
     </nav>
   </main>
   <script src="bdh.js"></script>
+<script src="../lesson-ui.js"></script>
 </body>
 </html>

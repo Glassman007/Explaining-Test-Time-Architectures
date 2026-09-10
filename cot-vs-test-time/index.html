@@ -1,1 +1,59 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#05090e"><title>Chain-of-Thought and Test-Time Compute</title><link rel="stylesheet" href="../search/search.css"><link rel="stylesheet" href="../lesson-entry.css"></head><body><header><a href="../index.html#adaptation">← Back</a><span>COMPARE</span></header><main><h1>Reasoning and inference compute</h1><table><thead><tr><th>Chain-of-Thought</th><th>Test-Time Compute</th></tr></thead><tbody><tr><td>Think step-by-step.</td><td>Spend more computation to solve the problem better.</td></tr><tr><td>Typically expresses a sequence of intermediate reasoning steps.</td><td>May use multiple reasoning paths, iterations, evaluation, or verification.</td></tr><tr><td>Problem → Step 1 → Step 2 → Answer</td><td>Problem → Generate A/B/C → Evaluate → Select → Answer</td></tr><tr><td>How should I reason?</td><td>How should I use the available compute?</td></tr></tbody></table><p class="destination-lede">Chain-of-thought can be one way to use inference compute. The two concepts overlap.</p></main><script src="../navigation.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#05080d">
+  <meta name="description" content="Chain-of-Thought compared with Test-Time Architecture and Test-Time Compute.">
+  <title>CoT vs Test-Time Architecture</title>
+  <link rel="stylesheet" href="comparison.css">
+<link rel="stylesheet" href="../editorial.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html#architectures" class="back">← Architectures</a>
+    <div class="brand">TEST-TIME ARCHITECTURES / CONCEPT COMPARISON</div>
+    <div class="tag">REFERENCE</div>
+  </header>
+
+  <main class="comparison-shell">
+    <div class="intro">
+      <p class="kicker">CONCEPT DISTINCTION</p>
+      <h1>Chain-of-Thought <span>vs</span> Test-Time Architecture</h1>
+      <p class="lede">CoT describes a reasoning process. Test-time architecture describes how a system allocates additional computation before committing to an answer.</p>
+    </div>
+
+    <div class="table-frame" role="region" aria-label="Chain-of-Thought and Test-Time Architecture comparison" tabindex="0">
+      <table>
+        <thead>
+          <tr>
+            <th>Chain-of-Thought (CoT)</th>
+            <th>Test-Time Architecture / Test-Time Compute</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Think step-by-step.</strong></td><td><strong>Spend more computation to solve the problem better.</strong></td></tr>
+          <tr><td>The model follows a <strong>single reasoning chain</strong>.</td><td>The system can explore <strong>multiple reasoning chains or computational paths</strong>.</td></tr>
+          <tr><td>Example: <code>Problem → Step 1 → Step 2 → Step 3 → Answer</code></td><td>Example: <code>Problem → Generate A/B/C → Evaluate → Select → Answer</code></td></tr>
+          <tr><td>The main idea is <strong>intermediate reasoning</strong>.</td><td>The main idea is <strong>additional computation during inference</strong>.</td></tr>
+          <tr><td>It answers: <strong>“How should I reason?”</strong></td><td>It answers: <strong>“How should I use my available compute before answering?”</strong></td></tr>
+          <tr><td>Usually moves <strong>forward from one step to the next</strong>.</td><td>Can <strong>branch, compare, verify, refine, search, or backtrack</strong>.</td></tr>
+          <tr><td>One reasoning path is enough.</td><td>Multiple paths can be explored if useful.</td></tr>
+          <tr><td>Does not inherently require comparing different answers.</td><td>Can generate several answers and <strong>compare them</strong>.</td></tr>
+          <tr><td>Does not inherently require a verifier.</td><td>Can use a <strong>verifier/critic/judge</strong>.</td></tr>
+          <tr><td>Does not inherently require search.</td><td>Can perform <strong>search over possible solutions</strong>.</td></tr>
+          <tr><td>Does not inherently require iteration.</td><td>Can repeatedly <strong>generate → evaluate → improve</strong>.</td></tr>
+          <tr><td>Can be encouraged simply through prompting.</td><td>Usually involves an <strong>inference-time strategy/system</strong> for allocating compute.</td></tr>
+          <tr><td>More reasoning usually means a <strong>longer chain</strong>.</td><td>More reasoning can mean <strong>more chains, deeper search, more verification, or more iterations</strong>.</td></tr>
+          <tr><td>Example: A model solves a math problem by writing 10 reasoning steps.</td><td>Example: A model solves the problem 20 different ways, checks the solutions, and chooses the most reliable one.</td></tr>
+          <tr><td><strong>CoT can be one component inside test-time computation.</strong></td><td><strong>Test-time computation can use CoT as one of its components.</strong></td></tr>
+          <tr><td>Think of it as <strong>one person thinking deeply about a problem</strong>.</td><td>Think of it as <strong>a team exploring, checking, and debating different solutions before deciding</strong>.</td></tr>
+          <tr><td><strong>Narrower concept.</strong></td><td><strong>Broader concept.</strong></td></tr>
+          <tr><td><strong>CoT = reasoning process.</strong></td><td><strong>Test-time architecture = computation strategy.</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+<script src="../lesson-ui.js"></script>
+</body>
+</html>

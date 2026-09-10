@@ -1,1 +1,15 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#05090e"><title>Tree / Graph Search</title><link rel="stylesheet" href="search.css"><link rel="stylesheet" href="../lesson-entry.css"></head><body><header><a href="../index.html#inference">← Back to inference</a><span>TREE / GRAPH SEARCH</span></header><main><p class="eyebrow">Explore connected possibilities</p><h1>Tree / Graph Search</h1><details open><summary>Choose a search experience</summary><nav><a class="tree-search" href="../tree-graph/index.html"><strong>Tree Search</strong><span>Mini Maze · Planning Problem · Constraint Puzzle</span></a><a class="graph-search" href="../graph-search/index.html"><strong>Graph Search</strong><span>Branch, merge, reuse, and refine a web of thoughts.</span></a></nav></details></main><script src="../navigation.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tree / Graph Search</title><link rel="stylesheet" href="search.css"><link rel="stylesheet" href="../editorial.css">
+</head>
+<body>
+<header><a href="../inference-strategy/index.html">← Inference strategies</a><span>TREE / GRAPH SEARCH</span></header>
+<main><p class="eyebrow">EXPLORE POSSIBLE PATHS</p><h1>Tree / Graph Search</h1>
+<details open><summary>Choose a search approach</summary><nav aria-label="Search approaches"><a href="../tree-graph/index.html"><strong>Tree Search</strong><span>Mini Maze · Planning Problem · Constraint Puzzle</span></a><a href="../graph-search/index.html"><strong>Graph Search</strong><span>Explore connected reasoning states</span></a></nav></details>
+</main>
+<script>
+document.querySelectorAll('nav a').forEach(link=>link.addEventListener('click',async e=>{if(e.button!==0||e.ctrlKey||e.metaKey||e.altKey||e.shiftKey||matchMedia('(prefers-reduced-motion: reduce)').matches)return;e.preventDefault();const r=link.getBoundingClientRect(),overlay=document.createElement('div');overlay.className='expansion';document.body.append(overlay);try{await overlay.animate([{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'18px'},{left:0,top:0,width:'100vw',height:'100vh',borderRadius:0}],{duration:700,easing:'cubic-bezier(.65,0,.2,1)',fill:'forwards'}).finished;}catch{}location.href=link.href;}));
+addEventListener('pageshow',()=>document.querySelector('.expansion')?.remove());
+</script>
+<script src="../lesson-ui.js"></script>
+</body></html>

@@ -1,1 +1,37 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#05090e"><title>Parallel Sampling</title><link rel="stylesheet" href="parallel.css"><link rel="stylesheet" href="../lesson-entry.css"></head><body><header class="topbar"><a class="back" href="../inference-strategy/index.html">← Inference Strategy</a><span class="brand">THE PARALLEL MIND</span><span id="progress" class="progress"></span></header><main><section class="mode-intro"><p id="modeEyebrow" class="eyebrow"></p><h1 id="modeTitle"></h1><div class="mode-rail"><i></i><i></i><i></i></div></section><div id="workspace" class="workspace"></div><div class="bottom-bar"><span id="counter"></span><button id="nextPuzzle" type="button">Next puzzle →</button></div></main><script src="parallel.js"></script><script src="../navigation.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#05090e">
+  <title>Superposition: The Parallel Mind</title>
+  <link rel="stylesheet" href="parallel.css">
+<link rel="stylesheet" href="../editorial.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="../inference-strategy/index.html" class="back">← Inference strategies</a>
+    <div class="brand">SUPERPOSITION: THE PARALLEL MIND</div>
+    <div class="progress" id="progress">MODE 1 · PUZZLE 1/2</div>
+  </header>
+
+  <main>
+    <section class="mode-intro">
+      <p class="eyebrow" id="modeEyebrow">MODE 1</p>
+      <h1 id="modeTitle">Serial Room</h1>
+      <div class="mode-rail" aria-hidden="true"><i class="active"></i><i></i><i></i></div>
+    </section>
+
+    <section class="workspace" id="workspace"></section>
+
+    <footer class="footerbar">
+      <div class="counter" id="counter">TURN 0</div>
+      <button id="nextPuzzle" class="next" type="button" disabled>Next puzzle →</button>
+    </footer>
+  </main>
+
+  <template id="gridTemplate"><div class="grid"></div></template>
+  <script src="parallel.js"></script>
+<script src="../lesson-ui.js"></script>
+</body>
+</html>

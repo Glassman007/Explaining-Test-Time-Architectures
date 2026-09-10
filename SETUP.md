@@ -1,36 +1,37 @@
 # Setup Instructions
 
-## Current uploaded project
+## Project Overview
 
-This source is a static browser application. The uploaded archive does **not** contain a notebook, Python model service, Node backend, database, or API server that must be started.
+DataForge is a static browser-based learning application. It does not require a notebook, Python model service, Node backend, database, or API server.
 
 ## Requirements
 
 - A modern desktop browser with JavaScript and WebGL enabled.
 - Python 3.x for the simplest local static server, or any equivalent HTTP server.
-- Internet access is currently useful because several CSS files import **Manrope** from Google Fonts. Local GLB, image, and bundled Three.js assets are served from the repository.
+- Internet access for CSS files that load the **Manrope** font from Google Fonts.
+- Local GLB, image, and bundled Three.js assets are served directly from the repository.
 
-## Run locally
+## Run Locally
 
-From the repository root (the folder containing `index.html`):
+From the repository root containing `index.html`, run:
 
 ```bash
 python -m http.server 8000
 ```
 
-Then open:
+Open:
 
 ```text
 http://localhost:8000/
 ```
 
-Alternative: VS Code Live Server or another static-server extension.
+VS Code Live Server and equivalent local static-server tools are also supported.
 
-## Why `file://` is not recommended
+## HTTP Serving
 
-The main page loads JavaScript modules and GLB assets. Browser security rules can block or alter module/asset behavior when the page is opened directly from the filesystem. Serve it over HTTP.
+The project loads JavaScript modules and GLB assets. Browser security rules can block or alter module and asset behavior when pages are opened directly with `file://`, so the project is served over HTTP.
 
-## Regenerate the root web GLB
+## Regenerate the Root Web GLB
 
 The repository includes:
 
@@ -44,7 +45,7 @@ Run:
 python tools/build_web.py
 ```
 
-It regenerates:
+This regenerates:
 
 ```text
 assets/interconnected-web.glb
@@ -52,10 +53,6 @@ assets/interconnected-web.glb
 
 using Python standard-library code.
 
-## No notebook/local model component detected
+## Runtime Structure
 
-There is therefore no notebook-specific setup to document for this version. If a notebook, backend, model checkpoint, or external API is added later, update this file with exact versions, commands, environment variables, and expected outputs.
-
-## Pre-deployment check
-
-The uploaded archive is currently missing several lesson HTML entry pages referenced by navigation. Restore them before judging, then test every navigation target from a clean browser session.
+The submitted application is client-side. No notebook-specific environment, local model checkpoint, backend process, database migration, or API credential is required for the documented version.

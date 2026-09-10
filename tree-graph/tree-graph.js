@@ -245,6 +245,7 @@
 
     trigger.addEventListener('click',()=>{
       if (mazeAgentRunning) return;
+      clearTimers();
       c.classList.add('agent-revealed');
       resetMazeForAgent();
       ensureRobot(c);

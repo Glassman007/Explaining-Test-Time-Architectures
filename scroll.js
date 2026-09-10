@@ -29,6 +29,7 @@
   insight.classList.toggle('is-visible',q>2.97);insight.inert=q<=2.97;
   hero.querySelectorAll('.side').forEach(el=>el.tabIndex=q>.3?-1:0);
   document.querySelectorAll('[data-step]').forEach(b=>{if(+b.dataset.step===Math.round(q))b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});
+  const fallback=hero.querySelector('.artifact-fallback');fallback.textContent=q<.5?'✦':q<1.5?'?':q<2.5?'⚙':'◷';fallback.style.left=q<.5?'8%':'47%';fallback.style.top=q<.5?'10%':'40%';
   window.ttaState={p:q/3,q,gentle:g};dispatchEvent(new CustomEvent('tta-progress',{detail:window.ttaState}));
  }
  function schedule(){if(!pending){pending=true;requestAnimationFrame(render);}}
@@ -59,6 +60,12 @@
  addEventListener('touchcancel',()=>{touchY=null;},{passive:true});
  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);reduced.addEventListener('change',schedule);addEventListener('tta-motion-change',schedule);
  window.ttaGo=go;
- if(location.hash==='#architectures')requestAnimationFrame(()=>go(1));else if(location.hash==='#inference')requestAnimationFrame(()=>go(2));else if(location.hash==='#adaptation')requestAnimationFrame(()=>go(3));
- render();
+ const sceneHashes={'#architectures':1,'#inference':2,'#adaptation':3};
+ function restoreScene(){
+  const chapterStep=sceneHashes[location.hash] ?? history.state?.chapterStep;
+  if(chapterStep!=null){cancelAnimationFrame(frame);target=null;scrollTo({top:story.offsetTop+chapterStep*(story.offsetHeight-hero.offsetHeight)/3,behavior:'instant'});}
+  render();document.documentElement.classList.remove('restoring-scene');
+ }
+ addEventListener('pageshow',restoreScene);addEventListener('hashchange',restoreScene);
+ restoreScene();
 })();

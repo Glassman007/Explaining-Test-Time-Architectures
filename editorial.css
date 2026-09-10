@@ -1,0 +1,84 @@
+/* Shared editorial system. Native fonts; no downloaded or bundled font dependency. */
+:root{--bg:#05090e;--panel:#08121a;--line:#29414a;--cyan:#89d9ef;--gold:#e4b95e;--green:#8ed6b3;--red:#d97b7b;--text:#edf5f7;--muted:#a5b7bf;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+html{scroll-behavior:auto}body{background:#05090e;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;animation:none}
+body::before,.ambient{display:none!important}
+h1,h2,h3,h4,.stage h1,.stage h2,.stage h3,.stage h4{font-family:"Arial Narrow",system-ui,sans-serif;font-weight:700;letter-spacing:-.035em;line-height:1.12}
+h1,.intro h1,.page-header h1{font-size:clamp(38px,5.5vw,80px);background:none;-webkit-text-fill-color:currentColor}
+h1 span,h2 span{background:none;-webkit-text-fill-color:currentColor}
+button,input,select,textarea{font:inherit}button,a,select,input{touch-action:manipulation}button{cursor:pointer}
+a{color:var(--cyan);text-underline-offset:4px}p,li{line-height:1.7}p{font-size:16px}
+[hidden],.hidden{display:none!important}
+.topbar,.site-header,.page-header{background:#05090e;backdrop-filter:none;border-color:var(--line)}
+.back,.back-home,.back-link,.step-count,.progress,.header-label,.eyebrow,.kicker,.row-index,.row-number{font-size:13px;line-height:1.5}
+.lesson-shell{max-width:1540px;margin:auto;padding:44px 5vw 32px;display:block}
+.rail{display:none}.stage-wrap{height:auto;min-height:0}
+.stage{padding:0;align-items:stretch;text-align:left;transform:none;filter:none;transition:none}
+.stage.active{display:flex}.stage>h1,.stage>h2{max-width:1080px;font-size:clamp(36px,4.8vw,68px);line-height:1.08;margin:0 0 28px;text-align:left}
+.stage .kicker{margin-bottom:16px}.stage .stage-note{font-size:14px;text-align:left;margin:0 0 20px}
+.editorial-row{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:clamp(28px,5vw,78px);align-items:start;margin:8px 0 32px;width:100%}
+.editorial-row>.stage-explainer{margin:0;width:100%;max-width:none;font-size:16px;line-height:1.7;text-align:left}
+.stage-explainer p,.stage-explainer li{font-size:16px;line-height:1.7}.stage-explainer h3{font-size:26px!important}
+.editorial-row .architecture-three,.editorial-row .architecture-three.compact-architecture-three,.editorial-row .memory-architecture-grid,.editorial-row .role-definition-grid{display:grid;grid-template-columns:1fr;gap:22px}
+.stage-explainer article{background:none!important;border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important;padding:18px 0!important;min-height:0!important}
+.stage-explainer article p,.stage-explainer article blockquote{max-width:none;font-size:16px}
+.stage-explainer small,.stage-explainer article small{font-size:13px;color:var(--gold)}
+.definition-pair>div,.concept-callout,.stage .lesson-quote,.equation-card,.inline-flow,.important-concept,.foundation-clarification{background:none;border:0!important;border-left:2px solid var(--gold)!important;border-radius:0;box-shadow:none;padding:10px 0 10px 18px!important}
+.stage .lesson-quote{margin:22px 0!important;width:100%;font-size:18px}.definition-pair{gap:22px}.definition-pair strong{font-size:13px}
+.architecture-figure{position:sticky;top:32px;margin:0;padding:22px 0;border-top:2px solid var(--cyan);border-bottom:1px solid var(--line);min-width:0;background:none}
+.architecture-figure .figure-index{font-size:13px;color:var(--cyan);text-transform:uppercase;letter-spacing:.12em;margin:0 0 14px}
+.architecture-figure img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain}.architecture-figure figcaption{font-size:14px;line-height:1.65;color:var(--muted);margin-top:16px}
+.figure-sources{width:100%;margin:28px 0 12px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted)}.figure-sources p{font-size:13px}.figure-sources a{margin-right:12px;display:inline-block}
+.interactive-lab{width:100%;max-width:none;margin:28px 0 16px;padding:28px 0 20px;border:0;border-top:2px solid var(--gold);border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none;text-align:left}
+.lab-heading{margin:0 0 20px;text-align:left}.lab-heading>span{font-size:13px;color:var(--gold)}.lab-heading h3{font-size:32px;margin:8px 0!important}.lab-heading p{max-width:760px;font-size:16px;margin:8px 0}
+.game-instructions{padding:0 0 20px;margin:0 0 26px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}
+.game-instructions strong{color:var(--gold);font-size:14px;letter-spacing:.06em}.game-instructions ol{margin:12px 0;padding-left:23px;display:grid;gap:6px}.game-instructions li{padding-left:4px;font-size:15px;line-height:1.6}
+.control-legend{display:flex;flex-wrap:wrap;gap:12px 24px;color:var(--muted);font-size:13px;margin:14px 0 0}.control-legend span{border-left:4px solid var(--cyan);padding-left:9px}.control-legend .action-key{border-color:var(--gold)}.control-legend .result-key{border-color:var(--green)}
+/* Cyan identifies choices; amber identifies actions. Labels and focus remain explicit. */
+body button,body select,.click-target{border:1px solid #568493;border-left:3px solid var(--cyan);border-radius:3px;color:#c7edf6;background:#0a1c25;box-shadow:none;font-size:14px;line-height:1.5;min-height:44px;padding:11px 16px;transition:background .18s,border-color .18s}
+body button:hover:not(:disabled),.click-target:hover{background:#14323e;color:white;box-shadow:none;transform:none}
+body button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid #edf5f7;outline-offset:4px}
+body .primary,body .action-control,body .next,body .lock,body .run-vote{background:#292215;color:#f5d58f;border-color:#957947;border-left-color:var(--gold);border-radius:3px;font-size:14px}
+body .primary:hover:not(:disabled),body .action-control:hover:not(:disabled){background:#40331a;color:#ffe7b6}
+body button:disabled{opacity:.42;cursor:default;transform:none!important}
+body button.selected,body button.active,body button[aria-pressed="true"]{background:#173844;border-color:var(--cyan);box-shadow:inset 0 -3px var(--cyan);color:white}
+body button.correct,body button.complete,body .choices button.correct{background:#153026!important;border-color:var(--green)!important;color:#b7e8cf!important}
+body button.wrong,body .choices button.wrong{background:#321c22!important;border-color:var(--red)!important;color:#ffc2c2!important}
+body input[type="range"]{accent-color:var(--cyan);min-height:36px;width:100%}
+.interactive-lab :is(.machine-build,.memory-machine,.query-port,.forensic-case,.observation-window,.rebuild-canvas,.route-drop,.decoder-machine,.black-box-machines article,.hidden-machines article,.depth-shafts article,.replay-machines article,.locked-theta,.blind-challenge,.module-takeaway,.query-port-readout,.halt-panel,.classification-drops>div){border-radius:3px;box-shadow:none;background:#08121a}
+.interactive-lab p,.interactive-lab .feedback,.interactive-lab .lab-hint,.interactive-lab .query-port-readout{font-size:15px;line-height:1.65}.interactive-lab small{font-size:12px}
+.interactive-lab .locked-theta{margin:20px auto}.interactive-lab .compact button{font-size:14px;padding:11px 16px}
+.mastery-shell,.mastery-question,.mastery-modebar,.mastery-check,.module-mastery-result,.architecture-mastery-summary{border-radius:0!important;box-shadow:none!important;background:#08121a!important}
+.mastery-shell{width:100%!important;max-width:none!important;margin:24px 0!important}.mastery-question{border:0!important;border-top:1px solid var(--line)!important}.mastery-modebar{border-left:3px solid var(--gold)!important}.mastery-question p{font-size:16px}.mastery-options button{font-size:14px;line-height:1.6}
+.lesson-nav{border-top:1px solid var(--line);padding:24px 0 0;margin-top:32px;position:relative;background:none}
+.lesson-nav #prevStep,.lesson-nav #nextStep{width:148px;min-width:148px;border-radius:3px;padding:12px;font-size:14px;white-space:normal}
+/* Research pages follow the same open column rhythm. */
+.story-row,.research-row{border-top:1px solid var(--line);border-radius:0;background:none;box-shadow:none;gap:clamp(28px,4vw,64px)}
+.visual,.visual-frame{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0;min-width:0}
+.visual img,.visual-frame img{height:auto;max-width:100%;object-fit:contain;border-radius:0;filter:none}
+.story-copy h2,.research-row h2{font-size:clamp(26px,2.7vw,40px)}.story-copy p,.research-row p{font-size:16px}
+.gateway-card,.lesson-card,.panel,.principle-pair>p,.research-row blockquote,.constraint-card,.plan-option{background:#08121a;border-radius:3px;box-shadow:none}
+.gateway-card{border:1px solid var(--line);border-left:3px solid var(--cyan)}.gateway-card:hover{background:#0d222b;box-shadow:none}
+.panel{border:0;border-top:1px solid var(--line);padding:22px 16px}.principle-pair>p{background:none;border:0;border-left:2px solid var(--gold);border-radius:0}
+.chip,.node{box-shadow:none}.panel-title{font-size:14px}.source-note,figcaption{font-size:13px;line-height:1.7}
+@media(max-width:800px){.editorial-row{grid-template-columns:1fr;gap:28px}.architecture-figure{position:static}.lesson-shell{padding:28px 20px}.stage>h1,.stage>h2{font-size:36px}.editorial-row .architecture-three{grid-template-columns:1fr}.definition-pair{grid-template-columns:1fr}.lesson-nav #prevStep,.lesson-nav #nextStep{min-width:118px;width:118px}.interactive-lab{padding:24px 0}.interactive-lab :is(.query-ports,.hidden-machines,.depth-shafts,.replay-machines,.black-box-machines,.machine-build-grid,.memory-machine-grid,.decoder-machines){grid-template-columns:1fr}.story-row,.research-row{gap:24px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Keep the graph canvas usable beneath its instructions. */
+.thought-web-page{overflow:auto}.thought-web-page .game-shell{height:auto;min-height:100svh;grid-template-rows:auto auto auto minmax(560px,1fr)}
+.thought-web-page .game-instructions{margin:0;padding:12px 0}.thought-web-page .play-layout{min-height:560px}
+.machine-canvas,#timelineTheta{cursor:pointer}.machine-canvas{border:2px dashed var(--cyan)!important;background:#0a1c25!important;border-radius:3px!important}
+.stage .foundation-clarification{position:static}
+@media(max-width:800px){.thought-web-page .game-shell{padding:20px 16px}.thought-web-page .play-layout{grid-template-columns:1fr}.thought-web-page .canvas-panel{min-height:520px}.thought-web-page .game-header{grid-template-columns:auto 1fr}.thought-web-page .budget-block{grid-column:1/-1}.thought-web-page .challenge-bar{flex-wrap:wrap}.thought-web-page .game-shell{display:block}.thought-web-page .game-shell>*{margin-bottom:20px}}
+
+/* Scope compact graph controls so shared button sizing does not clip them. */
+.thought-web-page .play-layout{grid-template-columns:190px minmax(0,1fr) 245px}
+.thought-web-page .play-layout>*{min-width:0}
+.thought-web-page .canvas-toolbar{height:auto;min-height:44px;gap:10px;flex-wrap:wrap;padding:10px 14px}
+.thought-web-page .canvas-viewport{max-height:760px}
+.thought-web-page .op-button{padding:10px 8px;gap:8px;white-space:normal;text-align:left}
+.thought-web-page .thought-node{border-radius:3px;box-shadow:none;overflow-wrap:anywhere}
+.thought-web-page .composer-card,.thought-web-page .final-card{max-height:85svh;overflow:auto;border-radius:3px}
+.thought-web-page .composer.graph-pick{padding:12px;place-items:end center}
+.thought-web-page .composer.graph-pick .composer-card{width:min(620px,90vw);max-height:45svh}
+@media(max-width:1100px){.thought-web-page .play-layout{grid-template-columns:1fr}.thought-web-page .canvas-panel{height:600px}.thought-web-page .operations-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.thought-web-page .operations-panel .panel-heading,.thought-web-page .operation-legend{grid-column:1/-1}.thought-web-page .score-panel{min-height:0}}
+@media(max-width:500px){.thought-web-page .operations-panel{grid-template-columns:1fr}.thought-web-page .composer.graph-pick .composer-card{max-height:42svh}.thought-web-page .game-header{gap:12px}.thought-web-page .brand-block h1{font-size:30px}}

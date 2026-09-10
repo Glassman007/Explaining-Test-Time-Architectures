@@ -12,10 +12,6 @@ adaptation/assets/trm-bandwidth-dark.png,png,5405,research-derived/custom visual
 adaptation/assets/what-can-change.png,png,109756,research-derived/custom visual; record exact paper/figure/license
 assets/drop-of-water.glb,glb,3378724,Sketchfab-origin metadata; exact creator/model/license required
 assets/fire.jpg,jpg,84563,unknown - review SOURCES_AND_LICENSES.md
-assets/fonts/CaskoLuxuryDemo-Regular.otf,otf,45880,personal-use demo terms; verify permission
-assets/fonts/Font-Readme.pdf,pdf,585163,personal-use demo terms; verify permission
-assets/fonts/Montelgo-Regular.otf,otf,39788,personal/non-profit terms in bundled readme; verify permission
-assets/fonts/Street-Robot-Inline.ttf,ttf,13972,supplied license text requires clarification
 assets/gondor-tree.jpg,jpg,35185,unknown - review SOURCES_AND_LICENSES.md
 assets/interconnected-star.glb,glb,4667916,project/AI-generated; document outbound license
 assets/interconnected-web.glb,glb,944456,project-generated; build script available
@@ -35,3 +31,9 @@ inference-strategy/assets/tree-partial-states.png,png,88685,research-derived/cus
 tree-graph/assets/constraint.jfif,jfif,33952,unknown - review SOURCES_AND_LICENSES.md
 tree-graph/assets/mini-maze.jpg,jpg,204665,unknown - review SOURCES_AND_LICENSES.md
 tree-graph/assets/planning.jfif,jfif,29790,unknown - review SOURCES_AND_LICENSES.md
+bdh-cq/assets/context-query.svg,svg,2153,original AI-assisted schematic; primary paper sources in SOURCES_AND_LICENSES.md and lesson footer
+bdh-cq/assets/decoder.svg,svg,1386,original AI-assisted schematic; primary paper sources in SOURCES_AND_LICENSES.md and lesson footer
+bdh-cq/assets/information-routes.svg,svg,3619,original AI-assisted schematic; primary paper sources in SOURCES_AND_LICENSES.md and lesson footer
+bdh-cq/assets/reasoning-depth.svg,svg,4348,original AI-assisted schematic; primary paper sources in SOURCES_AND_LICENSES.md and lesson footer
+bdh-cq/assets/state-lifecycle.svg,svg,2158,original AI-assisted schematic; primary paper sources in SOURCES_AND_LICENSES.md and lesson footer
+bdh-cq/assets/three-machines.svg,svg,3336,original AI-assisted schematic; primary paper sources in SOURCES_AND_LICENSES.md and lesson footer

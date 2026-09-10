@@ -3,7 +3,7 @@ import {GLTFLoader} from './vendor/loaders/GLTFLoader.js';
 const hero=document.querySelector('.hero'),canvas=document.querySelector('.artifact-canvas'),fallback=document.querySelector('.artifact-fallback');
 const clamp=v=>Math.max(0,Math.min(1,v)),ease=v=>{v=clamp(v);return v*v*(3-2*v)};
 let state=window.ttaState||{q:0,gentle:false},renderer,frame,disposed=false;
-addEventListener('tta-progress',e=>{state=e.detail;const q=state.q;fallback.textContent=q<.5?'✦':q<1.5?'?':q<2.5?'⚙':'⑂';fallback.style.left=q<.5?'8%':'47%';fallback.style.top=q<.5?'10%':'40%';});
+addEventListener('tta-progress',e=>{state=e.detail;const q=state.q;fallback.textContent=q<.5?'✦':q<1.5?'?':q<2.5?'⚙':'◷';fallback.style.left=q<.5?'8%':'47%';fallback.style.top=q<.5?'10%':'40%';});
 try{
  renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});
  renderer.setClearColor(0,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.65;
@@ -18,6 +18,19 @@ try{
  const positions=targets.map(o=>o.geometry.attributes.position.array),colors=targets.map(o=>o.geometry.attributes.color.array),partIds=targets.map(o=>o.geometry.attributes._part.array);
  const gearMeta=targets[2].userData,gearCenters=[new THREE.Vector3(.48,.4,0),new THREE.Vector3(-.64,-.49,0)].map(v=>v.sub(new THREE.Vector3().fromArray(gearMeta.sourceCenter)).multiplyScalar(gearMeta.sourceScale));
  const flowNext=targets.map(o=>o.geometry.attributes._flow_next.array);
+ // Circle and two independent clock hands, matched to the gear assembly's authored envelope.
+ const clockPositions=new Float32Array(sourceCount*3),clockParts=new Float32Array(sourceCount),clockNext=new Uint32Array(sourceCount);
+ let gearRadius=0;for(let i=0;i<sourceCount;i++)gearRadius=Math.max(gearRadius,Math.abs(positions[2][i*3]),Math.abs(positions[2][i*3+1]));
+ const radius=Math.min(1.40,gearRadius),ringEnd=Math.floor(sourceCount*.72),minuteEnd=Math.floor(sourceCount*.87);
+ for(let i=0;i<sourceCount;i++){
+  const k=i*3,part=i<ringEnd?0:i<minuteEnd?1:2,start=part===0?0:part===1?ringEnd:minuteEnd,end=part===0?ringEnd:part===1?minuteEnd:sourceCount;
+  const t=(i-start)/(end-start),grain=(i*.61803398875)%1;
+  clockParts[i]=part;clockNext[i]=i+1<end?i+1:start;
+  if(part===0){const a=t*Math.PI*2,r=radius+(grain-.5)*.055;clockPositions[k]=Math.cos(a)*r;clockPositions[k+1]=Math.sin(a)*r;}
+  else{clockPositions[k]=(grain-.5)*(part===1?.06:.035);clockPositions[k+1]=t*radius*(part===1?.64:.87);}
+  clockPositions[k+2]=((i*.41421356)%1-.5)*.09;
+ }
+ positions[3]=clockPositions;partIds[3]=clockParts;flowNext[3]=clockNext;
  const flowIndex=targets.map(()=>Uint32Array.from({length:count},(_,i)=>i%sourceCount)),flowPhase=Float32Array.from({length:count},(_,i)=>(i*.61803398875)%1);
  let tubeSource;for(const sc of gltf.scenes)sc.traverse(o=>{if(o.userData.suspensionTube)tubeSource=o;});if(!tubeSource)throw Error('Missing hex suspension tube');
  // Size each cage once from its complete rotation envelope. It never breathes or turns with the object.
@@ -117,7 +130,7 @@ try{
  },{passive:true});
  hero.addEventListener('pointerleave',()=>{pointerInside=false;pointerSample=null;});
  // Use the intact rotating surface for hit testing, so dispersing particles cannot flicker the hover state.
- function mechanical(p,k,kind,part,angle,out){out.set(p[k],p[k+1],p[k+2]);if(kind===2){const c=gearCenters[part===0?0:1],a=part===0?angle:-angle*16/10;const x=out.x-c.x,y=out.y-c.y;out.x=c.x+x*Math.cos(a)-y*Math.sin(a);out.y=c.y+x*Math.sin(a)+y*Math.cos(a);}return out;}
+ function mechanical(p,k,kind,part,angle,out){out.set(p[k],p[k+1],p[k+2]);if(kind===2){const c=gearCenters[part===0?0:1],a=part===0?angle:-angle*16/10;const x=out.x-c.x,y=out.y-c.y;out.x=c.x+x*Math.cos(a)-y*Math.sin(a);out.y=c.y+x*Math.sin(a)+y*Math.cos(a);}else if(kind===3&&part>0){const a=-spin*Math.PI*2/(part===1?60:6),x=out.x,y=out.y;out.x=x*Math.cos(a)-y*Math.sin(a);out.y=x*Math.sin(a)+y*Math.cos(a);}return out;}
  const fromPoint=new THREE.Vector3(),toPoint=new THREE.Vector3(),flowA=new THREE.Vector3(),flowB=new THREE.Vector3();
  function flowPoint(kind,i,angle,out){
   const a=flowIndex[kind][i],b=flowNext[kind][a],t=ease(flowPhase[i]);
@@ -125,9 +138,9 @@ try{
   // Neighbour-to-neighbour transport plus bounded coherent eddies: always flowing, never welded.
   {
    const x=out.x,y=out.y,z=out.z,time=spin*.85,wisp=i%13===0?1+1.2*Math.pow(Math.sin(spin*.55+i*.17),4):1;
-   out.x+=(.062*Math.sin(y*3.2+time)+.028*Math.cos(z*4-time*1.3))*wisp;
-   out.y+=(.052*Math.sin(z*3.6+time*.7)+.025*Math.cos(x*3-time)) *wisp;
-   out.z+=(.067*Math.sin(x*3-time*.6)+.027*Math.cos(y*4+time))*wisp;
+   out.x+=(kind===3?.24:1)*(.062*Math.sin(y*3.2+time)+.028*Math.cos(z*4-time*1.3))*wisp;
+   out.y+=(kind===3?.24:1)*(.052*Math.sin(z*3.6+time*.7)+.025*Math.cos(x*3-time)) *wisp;
+   out.z+=(kind===3?.24:1)*(.067*Math.sin(x*3-time*.6)+.027*Math.cos(y*4+time))*wisp;
    out.x+=Math.sin(i*1.71+spin*1.5)*.014;out.y+=Math.cos(i*2.12+spin*1.1)*.014;
   }
   return out;
@@ -166,7 +179,7 @@ try{
   tubeMaterial.uniforms.strength.value=stable&&settledKind>0?1:0;
   for(const spot of impactSpots){if(!stable||settledKind===0)spot.w=0;else if(!g)spot.w*=Math.exp(-3.8*dt);}
   suspensionTube.visible=tubeMaterial.uniforms.strength.value>0;
-  dustMat.uniforms.particleScale.value=haloMat.uniforms.particleScale.value=1.35*1.25*Math.min(1,.55+scale*.22);
+  dustMat.uniforms.particleScale.value=haloMat.uniforms.particleScale.value=1.35*1.25*Math.min(1,.55+scale*.22)*(2-ease(q));
   rig.updateMatrixWorld(true);
   const hit=anchorLayout(settledKind,gearAngle,n,morph);
   // Only a chapter morph changes the cage dimensions; idle rotation and flow never change its shape or center.
